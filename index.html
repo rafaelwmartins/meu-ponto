@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="meuponto">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Ponto</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/meuponto-__VERSION_SUFIX__.css" rel="stylesheet">
+    <script type="text/javascript">var FIREBASE_URL = '__FIREBASE_URL__';</script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="//cdn.firebase.com/v0/firebase.js"></script>
+    <script src="//cdn.firebase.com/v0/firebase-auth-client.js"></script>
+    <script src="//cdn.firebase.com/libs/angularfire/0.3.0/angularfire.min.js"></script>
+    <script src="//connect.facebook.net/en_US/all.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment+langs.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/meuponto-__VERSION_SUFIX__.js"></script>
+  </head>
+  <body>
+    <div id="fb-root"></div>
+    <div id="wrap">
+      <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#/">Meu Ponto</a>
+          </div>
+          <ul class="nav navbar-nav navbar-right" ng-show="user">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.name }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#/config">Configura&ccedil;&otilde;es</a></li>
+                <li><a href="#" ng-click="logout()">Sair</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="container main" ng-show="!user"><a href="#" ng-click="login()"><img src="img/login.png"></a></div>
+      <div class="container main" ng-show="user && !years"><img src="img/loader.gif"></div>
+      <div class="container main" ng-show="user && years" ng-view></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="text-muted credit pull-left"><a href="http://github.com/rafaelwmartins/meu-ponto" target="_blank">GitHub</a></div>
+        <div class="text-muted credit pull-right">__VERSION__</div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<form class="form-horizontal" name="detailForm">
+  <div class="form-group" ng-class="{ 'has-error': detailForm.date.$error.required }">
+    <label class="col-lg-2 control-label">Dia</label>
+    <div class="col-lg-4">
+      <input name="date" ng-disabled="edit" type="text" class="form-control" placeholder="dd/mm/aaa" ng-model="date" required>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-2 control-label">Entrada 1</label>
+    <div class="col-lg-4">
+      <input name="entry1" type="text" class="form-control" placeholder="H:mm" ng-model="record.entry1">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-2 control-label">Sa&iacute;da 1</label>
+    <div class="col-lg-4">
+      <input name="exit1" type="text" class="form-control" placeholder="H:mm" ng-model="record.exit1">
+    </div>
+  </div>
+    <div class="form-group">
+    <label class="col-lg-2 control-label">Entrada 2</label>
+    <div class="col-lg-4">
+      <input name="entry2" type="text" class="form-control" placeholder="H:mm" ng-model="record.entry2">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-2 control-label">Sa&iacute;da 2</label>
+    <div class="col-lg-4">
+      <input name="exit2" type="text" class="form-control" placeholder="H:mm" ng-model="record.exit2">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-2 control-label">Nota</label>
+    <div class="col-lg-4">
+      <input name="note" type="text" class="form-control" placeholder="Nota" ng-model="record.note">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="form-buttons col-lg-offset-2 col-lg-6">
+      <a href="#" ng-click="goBack()" class="btn btn-default">Cancelar</a>
+      <button ng-click="create()" ng-show="!edit" ng-disabled="detailForm.$invalid" class="btn btn-primary">Criar</button>
+      <button ng-click="update()" ng-show="edit" ng-disabled="detailForm.$invalid" class="btn btn-primary">Editar</button>
+      <button ng-click="delete()" ng-show="edit && !confirm" class="btn btn-danger">Remover</button>
+      <button ng-click="deleteConfirm()" ng-show="edit && confirm" class="btn btn-danger">Confirmar</button>
+    </div>
+  </div>
+</form>

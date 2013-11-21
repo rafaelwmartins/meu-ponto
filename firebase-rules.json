@@ -1,0 +1,8 @@
+{
+    "rules": {
+        "$id": {
+            ".read": "$id == auth.id",
+            ".write": "$id == auth.id"
+        }
+    }
+}
