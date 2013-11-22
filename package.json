@@ -1,7 +1,16 @@
 {
     "name": "meuponto",
     "version": "1.4.0",
+    "description": "Easy way to manage working hours.",
+    "homepage": "http://meuponto.site44.com",
     "author": "Rafael Martins",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rafaelwmartins/meu-ponto.git"
+    },
+    "licenses": [{
+        "type": "MIT"
+    }],
     "devDependencies": {
         "grunt": "~0.4.1",
         "grunt-contrib-clean": "~0.5.0",
