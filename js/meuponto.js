@@ -4,6 +4,7 @@ var meupontoModule = angular.module('meuponto', ['firebase']);
 // Constants
 // ---------
 var INITIAL_DATE_DEFAULT_VALUE = '02/09/1986';
+var LOCAL_STORAGE_KEY = 'backup';
 var DATE_TIME_FORMATS = {
     TIME: 'HH:mm',
     DATE: 'DD/MM/YYYY'
@@ -243,6 +244,10 @@ meupontoModule.run(['$rootScope', 'angularFire', 'angularFireAuth',
 // -------------------------
 
 function ConfigCtrl($rootScope, $scope, $location) {
+    $scope.confirm = false;
+    $scope.deleted = false;
+    $scope.save = false;
+
     $scope.update = function() {
         var date = moment($scope.config.initialDate, DATE_TIME_FORMATS.DATE);
         if (!date.isValid()) {
@@ -250,6 +255,26 @@ function ConfigCtrl($rootScope, $scope, $location) {
         }
         $rootScope.config.initialDate = date.format(DATE_TIME_FORMATS.DATE);
         goHome($location);
+    };
+
+    $scope.save = function() {
+        var storage = window.localStorage;
+        storage.setItem(LOCAL_STORAGE_KEY, JSON.stringify($rootScope.years));
+        $scope.saved = true;
+    };
+
+    $scope.delete = function() {
+        $scope.confirm = true;
+    };
+
+    $scope.deleteConfirm = function() {
+        $rootScope.years = {
+            last: {
+                value: 0
+            }
+        };
+        $scope.deleted = true;
+        $scope.confirm = false;
     };
 
     $scope.goBack = function() {
