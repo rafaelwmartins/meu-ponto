@@ -53,8 +53,13 @@ var getRoundedTime = function(time, officialTime, tolerance) {
 
 // Receives a value in milliseconds and creates a balance object useful for display
 var getBalanceObject = function(value) {
+    var absValue = Math.abs(value);
+    var hours = Math.floor(absValue / 3600000);
+    var minutes = Math.floor((absValue % 3600000) / 60000);
+    var hoursDisplay = hours < 10 ? '0' + hours : hours;
+    var minutesDisplay = minutes < 10 ? '0' + minutes : minutes;
     return {
-        display: moment('00:00', 'HH:mm').add('ms', Math.abs(value)).format(DATE_TIME_FORMATS.TIME),
+        display: hoursDisplay + ':' + minutesDisplay,
         value: value
     };
 };
@@ -284,6 +289,8 @@ function ConfigCtrl($rootScope, $scope, $location) {
 ConfigCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
 function ListCtrl($rootScope, $scope, $location) {
+    var sum = 0;
+
     $scope.updateTotalBalance = function(round) {
         if ($rootScope.config.initialDate === null || $rootScope.config.initialDate === undefined) {
             return;
@@ -361,9 +368,7 @@ function ListCtrl($rootScope, $scope, $location) {
             entry1: {},
             entry2: {},
             exit1: {},
-            exit2: {},
-            balance: {},
-            note: {}
+            exit2: {}
         };
         if (record !== null && record !== undefined && record.entry1 !== undefined && record.entry1 !== '') {
             row.entry1.display = record.entry1;
@@ -400,6 +405,10 @@ function ListCtrl($rootScope, $scope, $location) {
         }
         row.balance = getBalance(record, true);
         row.note = record.note;
+        if (row.balance && row.balance.value) {
+            sum += row.balance.value;
+        }
+        row.total = getBalanceObject(sum);
         return row;
     };
 

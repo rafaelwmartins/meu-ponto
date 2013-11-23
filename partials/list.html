@@ -17,6 +17,7 @@
               <th>Sa&iacute;da 2</th>
               <th>Nota</th>
               <th>Saldo</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
@@ -28,6 +29,7 @@
               <td><span ng-class="{ 'text-muted': row.exit2.optimal }">{{ row.exit2.display }}</span></td>
               <td><span class="glyphicon glyphicon-file" ng-class="{ 'text-muted': !row.note }" title="{{ row.note }}"></span></td>
               <td><span class="label" ng-class="{ 'label-success': row.balance.value >= 0, 'label-danger': row.balance.value < 0 }">{{ row.balance.display }}</span></td>
+              <td><span class="label" ng-class="{ 'label-success': row.total.value >= 0, 'label-danger': row.total.value < 0 }">{{ row.total.display }}</span></td>
             </tr>
           </tbody>
         </table>
