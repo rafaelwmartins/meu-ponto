@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         copy: {
             min: {
                 files: [{
-                    src: ['css/bootstrap.min.css'],
+                    src: ['css/bootstrap.min.css', 'css/hint.min.css'],
                     dest: '<%= buildDest %>'
                 }, {
                     src: ['favicon.ico'],
