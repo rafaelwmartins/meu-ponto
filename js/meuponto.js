@@ -678,3 +678,21 @@ meupontoModule.filter('dayWithoutMark', [
     }
 ]);
 // --- FILTERS end ---
+
+// --- DIRECTIVES start ---
+// ------------------------
+
+meupontoModule.directive('keybinding', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            invoke: '&'
+        },
+        link: function(scope, el, attr) {
+            Mousetrap.bind(attr.on, function() {
+                scope.$apply(scope.invoke);
+            });
+        }
+    };
+});
+// --- DIRECTIVES end ---
