@@ -1,4 +1,7 @@
-<button ng-click="create()" class="btn btn-primary">Criar novo registro</button>
+<div>
+  <button ng-click="create(false)" class="btn btn-primary">Criar novo registro</button>
+  <button ng-click="create(true)" class="btn btn-default">Criar novo ajuste</button>
+</div>
 <div ng-init="lastYear = getLast(years)" ng-repeat="(year, months) in years" ng-hide="$last"><h3>{{ year }}</h3>
 <div class="panel-group" id="accordion{{ year }}">
   <div class="panel panel-default" ng-init="lastMonth = getLast(months)" ng-repeat="(month, days) in months" ng-hide="$last">
@@ -21,8 +24,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="cursor-pointer" ng-repeat="(day, record) in days" ng-hide="$last" ng-click="edit( year + '-' + month + '-' + day )">
-              <td ng-init="row = getRow(record)"><span title="{{ year + month + day | dayOfWeek }}"><strong>{{ day }}</strong></span></td>
+            <tr class="cursor-pointer" ng-repeat="(day, record) in days" ng-class="{ 'active': isControl(day) }" ng-hide="$last" ng-click="edit( year + '-' + month + '-' + day )">
+              <td ng-init="row = getRow(record)"><span title="{{ year + month + day | dayOfWeek }}"><strong>{{ day | dayWithoutMark }}</strong></span></td>
               <td><span ng-class="{ 'text-muted': row.entry1.optimal }">{{ row.entry1.display }}</span></td>
               <td><span ng-class="{ 'text-muted': row.exit1.optimal }">{{ row.exit1.display }}</span></td>
               <td><span ng-class="{ 'text-muted': row.entry2.optimal }">{{ row.entry2.display }}</span></td>
@@ -36,11 +39,4 @@
       </div>
     </div>
   </div>
-</div>
-<div ng-show="config.initialDate">
-  <h4>Saldo desde <span ng-click="goConfig()"class="cursor-pointer"><u>{{ config.initialDate }}</u></span></h4>
-  <ul>
-    <li>Oficial: <span ng-init="updateTotalBalance(true)" class="label" ng-class="{ 'label-success': totalBalance.value >= 0, 'label-danger': totalBalance.value < 0 }">{{ totalBalance.display }}</span></li>
-    <li>Sem arredondamentos: <span ng-init="updateTotalBalance(false)" class="label" ng-class="{ 'label-success': totalBalanceNoRound.value >= 0, 'label-danger': totalBalanceNoRound.value < 0 }">{{ totalBalanceNoRound.display }}</span></li>
-  </ul>
 </div>

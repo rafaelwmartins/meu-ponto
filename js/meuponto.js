@@ -51,16 +51,58 @@ var getRoundedTime = function(time, officialTime, tolerance) {
     return Math.abs(diff) <= tolerance ? officialTime : time;
 };
 
-// Receives a value in milliseconds and creates a balance object useful for display
-var getBalanceObject = function(value) {
-    var absValue = Math.abs(value);
-    var hours = Math.floor(absValue / 3600000);
-    var minutes = Math.floor((absValue % 3600000) / 60000);
+// Returns the number of minutes
+// Examples: '26:30' -> 1590, '200' -> 200
+var getMinutes = function(formattedTime) {
+    var str = formattedTime.trim();
+    var totalMinutes = 0;
+    if (str.indexOf(':') !== -1) {
+        var negative = str[0] === '-';
+        if (negative) {
+            str = str.substring(1).trim();
+        }
+        var hoursAndMinutes = str.split(':');
+        var hours = parseInt(hoursAndMinutes[0], 10);
+        var minutes = parseInt(hoursAndMinutes[1], 10);
+        totalMinutes = hours * 60 + minutes;
+        if (negative) {
+            totalMinutes *= -1;
+        }
+    } else {
+        totalMinutes = parseInt(str, 10);
+    }
+    return !isNaN(totalMinutes) ? totalMinutes : 0;
+};
+
+// Returns a string in the HH:mm format
+// Example: 1590 -> '26:30'
+var getFormattedTime = function(minutes, showMinus) {
+    var negative = minutes < 0;
+    var absValue = Math.abs(minutes);
+    var hours = Math.floor(absValue / 60);
+    var minutesPart = Math.floor(absValue % 60);
     var hoursDisplay = hours < 10 ? '0' + hours : hours;
-    var minutesDisplay = minutes < 10 ? '0' + minutes : minutes;
+    var minutesDisplay = minutesPart < 10 ? '0' + minutesPart : minutesPart;
+    var formattedTime = hoursDisplay + ':' + minutesDisplay;
+    if (negative && showMinus) {
+        formattedTime = '-' + formattedTime;
+    }
+    return formattedTime;
+};
+
+// Receives a value and its unit and creates a balance object which is useful for display
+var getBalanceObject = function(value, unit) {
+    var minutes;
+    if (unit.toLocaleLowerCase() == 'ms') {
+        minutes = Math.floor(value / 60000);
+    } else if (unit.toLocaleLowerCase() == 's') {
+        minutes = Math.floor(value / 60);
+    } else { // minutes
+        minutes = value;
+    }
     return {
-        display: hoursDisplay + ':' + minutesDisplay,
-        value: value
+        display: getFormattedTime(minutes, false),
+        value: minutes
     };
 };
 
@@ -91,7 +133,7 @@ var getBalance = function(record, round) {
     var balanceValue = total - interval - OFFICIAL_TIMES.JOURNEY_DURATION;
 
     if (!round) {
-        return getBalanceObject(balanceValue);
+        return getBalanceObject(balanceValue, 'ms');
     }
 
     var balanceValueRounded;
@@ -100,7 +142,7 @@ var getBalance = function(record, round) {
     } else {
         balanceValueRounded = balanceValue + TOLERANCES.TOTAL > 0 ? 0 : balanceValue;
     }
-    return getBalanceObject(balanceValueRounded);
+    return getBalanceObject(balanceValueRounded, 'ms');
 };
 
 var goHome = function($location) {
@@ -149,6 +191,10 @@ meupontoModule.config(['$routeProvider', '$locationProvider',
             templateUrl: 'partials/detail.html'
         }).
         when('/create', {
+            controller: CreateCtrl,
+            templateUrl: 'partials/detail.html'
+        }).
+        when('/create/:adjust', {
             controller: CreateCtrl,
             templateUrl: 'partials/detail.html'
         }).
@@ -289,7 +335,7 @@ function ConfigCtrl($rootScope, $scope, $location) {
 ConfigCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
 function ListCtrl($rootScope, $scope, $location) {
-    var sum = 0;
+    $scope.sum = 0;
 
     $scope.updateTotalBalance = function(round) {
         if ($rootScope.config.initialDate === null || $rootScope.config.initialDate === undefined) {
@@ -327,9 +373,9 @@ function ListCtrl($rootScope, $scope, $location) {
         }
 
         if (round) {
-            $scope.totalBalance = getBalanceObject(totalBalanceValue);
+            $scope.totalBalance = getBalanceObject(totalBalanceValue, 'ms');
         } else {
-            $scope.totalBalanceNoRound = getBalanceObject(totalBalanceValue);
+            $scope.totalBalanceNoRound = getBalanceObject(totalBalanceValue, 'ms');
         }
     };
 
@@ -364,56 +410,64 @@ function ListCtrl($rootScope, $scope, $location) {
     };
 
     $scope.getRow = function(record) {
-        var row = {
-            entry1: {},
-            entry2: {},
-            exit1: {},
-            exit2: {}
-        };
-        if (record !== null && record !== undefined && record.entry1 !== undefined && record.entry1 !== '') {
-            row.entry1.display = record.entry1;
-            row.entry1.optimal = false;
-        } else {
-            row.entry1.display = moment(OFFICIAL_TIMES.ENTRY1, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
-            row.entry1.optimal = true;
-        }
-        if (record !== null && record !== undefined && record.entry2 !== undefined && record.entry2 !== '') {
-            row.entry2.display = record.entry2;
-            row.entry2.optimal = false;
-        } else {
-            row.entry2.display = moment(OFFICIAL_TIMES.ENTRY2, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
-            row.entry2.optimal = true;
-        }
-        if (record !== null && record !== undefined && record.exit1 !== undefined && record.exit1 !== '') {
-            row.exit1.display = record.exit1;
-            row.exit1.optimal = false;
-        } else {
-            row.exit1.display = moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME).subtract('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
-            row.exit1.optimal = true;
-        }
-        if (record !== null && record !== undefined && record.exit2 !== undefined && record.exit2 !== '') {
-            row.exit2.display = record.exit2;
-            row.exit2.optimal = false;
-        } else {
-            var partialRecord = {
-                entry1: row.entry1.display,
-                entry2: row.entry2.display,
-                exit1: row.exit1.display
+        var row;
+        if (record && record.adjust !== undefined) {
+            row = {
+                balance: record.adjust === 0 ? getBalanceObject(-$scope.sum, 'm') : getBalanceObject(record.adjust, 'm')
             };
-            row.exit2.display = getExitTime(partialRecord);
-            row.exit2.optimal = true;
+        } else {
+            row = {
+                entry1: {},
+                entry2: {},
+                exit1: {},
+                exit2: {}
+            };
+            if (record && record.entry1 !== undefined && record.entry1 !== '') {
+                row.entry1.display = record.entry1;
+                row.entry1.optimal = false;
+            } else {
+                row.entry1.display = moment(OFFICIAL_TIMES.ENTRY1, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                row.entry1.optimal = true;
+            }
+            if (record && record.entry2 !== undefined && record.entry2 !== '') {
+                row.entry2.display = record.entry2;
+                row.entry2.optimal = false;
+            } else {
+                row.entry2.display = moment(OFFICIAL_TIMES.ENTRY2, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                row.entry2.optimal = true;
+            }
+            if (record && record.exit1 !== undefined && record.exit1 !== '') {
+                row.exit1.display = record.exit1;
+                row.exit1.optimal = false;
+            } else {
+                row.exit1.display = moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME).subtract('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                row.exit1.optimal = true;
+            }
+            if (record && record.exit2 !== undefined && record.exit2 !== '') {
+                row.exit2.display = record.exit2;
+                row.exit2.optimal = false;
+            } else {
+                var partialRecord = {
+                    entry1: row.entry1.display,
+                    entry2: row.entry2.display,
+                    exit1: row.exit1.display
+                };
+                row.exit2.display = getExitTime(partialRecord);
+                row.exit2.optimal = true;
+            }
+            row.balance = getBalance(record, true);
         }
-        row.balance = getBalance(record, true);
         row.note = record.note;
         if (row.balance && row.balance.value) {
-            sum += row.balance.value;
+            $scope.sum += row.balance.value;
         }
-        row.total = getBalanceObject(sum);
+        row.total = getBalanceObject($scope.sum, 'm');
         return row;
     };
 
-    $scope.create = function() {
-        $location.path('/create');
+    $scope.create = function(adjust) {
+        var path = adjust ? '/create/adjust' : '/create';
+        $location.path(path);
     };
 
     $scope.goConfig = function() {
@@ -442,6 +496,13 @@ function ListCtrl($rootScope, $scope, $location) {
         }
         return index;
     };
+
+    $scope.isControl = function(day) {
+        if (day) {
+            return day.slice(-1) === '_';
+        }
+        return false;
+    };
 }
 ListCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
@@ -461,14 +522,27 @@ function EditCtrl($rootScope, $scope, $routeParams, $location) {
 
     $scope.edit = true;
     $scope.confirm = false;
-    $scope.date = day + '/' + month + '/' + year;
-    $scope.record = {
-        entry1: $rootScope.years[year][month][day].entry1,
-        entry2: $rootScope.years[year][month][day].entry2,
-        exit1: $rootScope.years[year][month][day].exit1,
-        exit2: $rootScope.years[year][month][day].exit2,
-        note: $rootScope.years[year][month][day].note
-    };
+    if (day.slice(-1) === '_') {
+        $scope.adjust = true;
+        $scope.date = day.substring(0, 2) + '/' + month + '/' + year;
+    } else {
+        $scope.date = day + '/' + month + '/' + year;
+    }
+
+    if ($scope.adjust) {
+        $scope.record = {
+            adjust: getFormattedTime($rootScope.years[year][month][day].adjust, true),
+            note: $rootScope.years[year][month][day].note
+        };
+    } else {
+        $scope.record = {
+            entry1: $rootScope.years[year][month][day].entry1,
+            entry2: $rootScope.years[year][month][day].entry2,
+            exit1: $rootScope.years[year][month][day].exit1,
+            exit2: $rootScope.years[year][month][day].exit2,
+            note: $rootScope.years[year][month][day].note
+        };
+    }
 
     $scope.update = function() {
         if (allEmpty($scope.record)) {
@@ -476,14 +550,21 @@ function EditCtrl($rootScope, $scope, $routeParams, $location) {
             return;
         }
 
-        formatRecordTimes($scope.record);
-        $rootScope.years[year][month][day] = {
-            entry1: $scope.record.entry1,
-            entry2: $scope.record.entry2,
-            exit1: $scope.record.exit1,
-            exit2: $scope.record.exit2,
-            note: $scope.record.note
-        };
+        if ($scope.adjust) {
+            $rootScope.years[year][month][day] = {
+                adjust: getMinutes($scope.record.adjust),
+                note: $scope.record.note
+            };
+        } else {
+            formatRecordTimes($scope.record);
+            $rootScope.years[year][month][day] = {
+                entry1: $scope.record.entry1,
+                entry2: $scope.record.entry2,
+                exit1: $scope.record.exit1,
+                exit2: $scope.record.exit2,
+                note: $scope.record.note
+            };
+        }
         goHome($location);
     };
 
@@ -502,8 +583,9 @@ function EditCtrl($rootScope, $scope, $routeParams, $location) {
 }
 EditCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$location'];
 
-function CreateCtrl($rootScope, $scope, $location) {
+function CreateCtrl($rootScope, $scope, $routeParams, $location) {
     $scope.date = moment().format(DATE_TIME_FORMATS.DATE);
+    $scope.adjust = $routeParams.adjust ? true : false;
 
     $scope.create = function() {
         var date = moment($scope.date, DATE_TIME_FORMATS.DATE);
@@ -513,6 +595,9 @@ function CreateCtrl($rootScope, $scope, $location) {
         var year = date.format('YYYY');
         var month = date.format('MM');
         var day = date.format('DD');
+        if ($scope.adjust) {
+            day = day + '_';
+        }
         if (hasDay($rootScope, year, month, day)) {
             return;
         }
@@ -536,14 +621,22 @@ function CreateCtrl($rootScope, $scope, $location) {
                 }
             }; // See note about AngularFire bug
         }
-        formatRecordTimes($scope.record);
-        $rootScope.years[year][month][day] = {
-            entry1: $scope.record.entry1,
-            entry2: $scope.record.entry2,
-            exit1: $scope.record.exit1,
-            exit2: $scope.record.exit2,
-            note: $scope.record.note
-        };
+
+        if ($scope.adjust) {
+            $rootScope.years[year][month][day] = {
+                adjust: getMinutes($scope.record.adjust),
+                note: $scope.record.note
+            };
+        } else {
+            formatRecordTimes($scope.record);
+            $rootScope.years[year][month][day] = {
+                entry1: $scope.record.entry1,
+                entry2: $scope.record.entry2,
+                exit1: $scope.record.exit1,
+                exit2: $scope.record.exit2,
+                note: $scope.record.note
+            };
+        }
 
         goHome($location);
     };
@@ -552,7 +645,7 @@ function CreateCtrl($rootScope, $scope, $location) {
         goHome($location);
     };
 }
-CreateCtrl.$inject = ['$rootScope', '$scope', '$location'];
+CreateCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$location'];
 // --- CONTROLLERS end ---
 
 // --- FILTERS start ---
@@ -570,6 +663,17 @@ meupontoModule.filter('dayOfWeek', [
     function() {
         return function(date) {
             return moment(date, 'YYYYMMDD').lang('pt-br').format('dddd');
+        };
+    }
+]);
+
+meupontoModule.filter('dayWithoutMark', [
+    function() {
+        return function(day) {
+            if (day.length > 2) {
+                return day.substring(0, 2);
+            }
+            return day;
         };
     }
 ]);

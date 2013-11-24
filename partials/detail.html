@@ -5,28 +5,34 @@
       <input name="date" ng-disabled="edit" type="text" class="form-control" placeholder="dd/mm/aaa" ng-model="date" required>
     </div>
   </div>
-  <div class="form-group">
+  <div ng-hide="adjust" class="form-group">
     <label class="col-lg-2 control-label">Entrada 1</label>
     <div class="col-lg-4">
       <input name="entry1" type="text" class="form-control" placeholder="H:mm" ng-model="record.entry1">
     </div>
   </div>
-  <div class="form-group">
+  <div ng-hide="adjust" class="form-group">
     <label class="col-lg-2 control-label">Sa&iacute;da 1</label>
     <div class="col-lg-4">
       <input name="exit1" type="text" class="form-control" placeholder="H:mm" ng-model="record.exit1">
     </div>
   </div>
-    <div class="form-group">
+    <div ng-hide="adjust" class="form-group">
     <label class="col-lg-2 control-label">Entrada 2</label>
     <div class="col-lg-4">
       <input name="entry2" type="text" class="form-control" placeholder="H:mm" ng-model="record.entry2">
     </div>
   </div>
-  <div class="form-group">
+  <div ng-hide="adjust" class="form-group">
     <label class="col-lg-2 control-label">Sa&iacute;da 2</label>
     <div class="col-lg-4">
       <input name="exit2" type="text" class="form-control" placeholder="H:mm" ng-model="record.exit2">
+    </div>
+  </div>
+  <div ng-show="adjust" class="form-group">
+    <label class="col-lg-2 control-label">Ajuste</label>
+    <div class="col-lg-4">
+      <input name="adjust" type="text" class="form-control" placeholder="H:mm OU 0 para zerar" ng-model="record.adjust">
     </div>
   </div>
   <div class="form-group">
