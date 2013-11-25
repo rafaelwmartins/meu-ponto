@@ -198,9 +198,9 @@ meupontoModule.config(['$routeProvider', '$locationProvider',
             controller: CreateCtrl,
             templateUrl: 'partials/detail.html'
         }).
-        when('/config', {
-            controller: ConfigCtrl,
-            templateUrl: 'partials/config.html'
+        when('/data', {
+            controller: DataCtrl,
+            templateUrl: 'partials/data.html'
         }).
         otherwise({
             redirectTo: '/'
@@ -210,26 +210,18 @@ meupontoModule.config(['$routeProvider', '$locationProvider',
 
 var initValues = function($rootScope) {
     $rootScope.years = null;
-    $rootScope.config = null;
     $rootScope.unbindRecords = null;
-    $rootScope.unbindConfig = null;
 };
 
 var bind = function(angularFire, $rootScope, id) {
-    angularFire(new Firebase(FIREBASE_URL + id + '/config'), $rootScope, 'config').then(function(unbind) {
-        $rootScope.unbindConfig = unbind;
-        angularFire(new Firebase(FIREBASE_URL + id + '/records'), $rootScope, 'years').then(function(unbind) {
-            $rootScope.unbindRecords = unbind;
-        });
+    angularFire(new Firebase(FIREBASE_URL + id + '/records'), $rootScope, 'years').then(function(unbind) {
+        $rootScope.unbindRecords = unbind;
     });
 };
 
 var unbind = function($rootScope) {
     if ($rootScope.unbindRecords) {
         $rootScope.unbindRecords();
-    }
-    if ($rootScope.unbindConfig) {
-        $rootScope.unbindConfig();
     }
     initValues($rootScope);
 };
@@ -241,9 +233,6 @@ var createNewUser = function(id) {
             last: {
                 value: 0
             }
-        },
-        config: {
-            initialDate: INITIAL_DATE_DEFAULT_VALUE
         }
     }; // See note about AngularFire bug
     return users;
@@ -294,25 +283,9 @@ meupontoModule.run(['$rootScope', 'angularFire', 'angularFireAuth',
 // --- CONTROLLERS start ---
 // -------------------------
 
-function ConfigCtrl($rootScope, $scope, $location) {
+function DataCtrl($rootScope, $scope, $location) {
     $scope.confirm = false;
     $scope.deleted = false;
-    $scope.save = false;
-
-    $scope.update = function() {
-        var date = moment($scope.config.initialDate, DATE_TIME_FORMATS.DATE);
-        if (!date.isValid()) {
-            return;
-        }
-        $rootScope.config.initialDate = date.format(DATE_TIME_FORMATS.DATE);
-        goHome($location);
-    };
-
-    $scope.save = function() {
-        var storage = window.localStorage;
-        storage.setItem(LOCAL_STORAGE_KEY, JSON.stringify($rootScope.years));
-        $scope.saved = true;
-    };
 
     $scope.delete = function() {
         $scope.confirm = true;
@@ -332,52 +305,10 @@ function ConfigCtrl($rootScope, $scope, $location) {
         goHome($location);
     };
 }
-ConfigCtrl.$inject = ['$rootScope', '$scope', '$location'];
+DataCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
 function ListCtrl($rootScope, $scope, $location) {
     $scope.sum = 0;
-
-    $scope.updateTotalBalance = function(round) {
-        if ($rootScope.config.initialDate === null || $rootScope.config.initialDate === undefined) {
-            return;
-        }
-
-        var params = $rootScope.config.initialDate.split('/');
-        if (params.length != 3) {
-            return;
-        }
-
-        var day = params[0];
-        var month = params[1];
-        var year = params[2];
-        var totalBalanceValue = 0;
-        for (var yearKey in $rootScope.years) {
-            if (isNaN(yearKey) || yearKey < year) {
-                continue;
-            }
-            for (var monthKey in $rootScope.years[yearKey]) {
-                if (isNaN(monthKey) || (yearKey === year && monthKey < month)) {
-                    continue;
-                }
-                for (var dayKey in $rootScope.years[yearKey][monthKey]) {
-                    if (isNaN(dayKey) || (yearKey === year && monthKey === month && dayKey < day)) {
-                        continue;
-                    }
-                    var record = $rootScope.years[yearKey][monthKey][dayKey];
-                    if (!isValidRecord(record)) {
-                        continue;
-                    }
-                    totalBalanceValue += getBalance(record, round).value;
-                }
-            }
-        }
-
-        if (round) {
-            $scope.totalBalance = getBalanceObject(totalBalanceValue, 'ms');
-        } else {
-            $scope.totalBalanceNoRound = getBalanceObject(totalBalanceValue, 'ms');
-        }
-    };
 
     var getExitTime = function(partialRecord) {
         var entry1 = getRoundedTime(partialRecord.entry1, OFFICIAL_TIMES.ENTRY1, TOLERANCES.ENTRY);
@@ -468,10 +399,6 @@ function ListCtrl($rootScope, $scope, $location) {
     $scope.create = function(adjust) {
         var path = adjust ? '/create/adjust' : '/create';
         $location.path(path);
-    };
-
-    $scope.goConfig = function() {
-        $location.path('/config');
     };
 
     $scope.edit = function(id) {
@@ -684,12 +611,12 @@ meupontoModule.filter('dayWithoutMark', [
 
 meupontoModule.directive('keybinding', function() {
     return {
-        restrict: 'E',
         scope: {
             invoke: '&'
         },
-        link: function(scope, el, attr) {
-            Mousetrap.bind(attr.on, function() {
+        restrict: 'E',
+        link: function(scope, element, attrs) {
+            Mousetrap.bind(attrs.on, function() {
                 scope.$apply(scope.invoke);
             });
         }
