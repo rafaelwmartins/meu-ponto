@@ -341,7 +341,9 @@ function DataCtrl($rootScope, $scope, $location) {
 DataCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
 function ListCtrl($rootScope, $scope, $location) {
-    $scope.sum = 0;
+    $scope.$watch('years', function() {
+        $scope.sum = 0;
+    });
 
     var getExitTime = function(partialRecord) {
         var entry1 = getRoundedTime(partialRecord.entry1, OFFICIAL_TIMES.ENTRY1, TOLERANCES.ENTRY);
