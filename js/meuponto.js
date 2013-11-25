@@ -178,6 +178,32 @@ var formatRecordTimes = function(record) {
     }
 };
 
+var getCSV = function(scope) {
+    var csv = "Dia,Entrada 1,Saída 1,Entrada 2,Saída 2,Nota";
+    for (var year in scope.years) {
+        if (isNaN(year)) {
+            continue;
+        }
+        for (var month in scope.years[year]) {
+            if (isNaN(month)) {
+                continue;
+            }
+            for (var day in scope.years[year][month]) {
+                if (isNaN(day)) {
+                    continue;
+                }
+                var entry1 = scope.years[year][month][day].entry1 || '';
+                var entry2 = scope.years[year][month][day].entry2 || '';
+                var exit1 = scope.years[year][month][day].exit1 || '';
+                var exit2 = scope.years[year][month][day].exit2 || '';
+                var note = scope.years[year][month][day].note || '';
+                csv = csv + '\n' + day + ',' + entry1 + ',' + exit1 + ',' + entry2 + ',' + exit2 + ',' + note;
+            }
+        }
+    }
+    return csv;
+};
+
 // Routes configuration
 meupontoModule.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
@@ -284,6 +310,10 @@ meupontoModule.run(['$rootScope', 'angularFire', 'angularFireAuth',
 // -------------------------
 
 function DataCtrl($rootScope, $scope, $location) {
+    $scope.$watch('years', function() {
+        $scope.csv = getCSV($scope);
+    });
+
     $scope.confirm = false;
     $scope.deleted = false;
 

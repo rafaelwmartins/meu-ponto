@@ -1,6 +1,7 @@
 <keybinding on="esc" invoke="goBack()" />
 <ul class="nav nav-tabs">
-  <li class="active"><a href="#json" data-toggle="tab">Firebase (JSON)</a></li>
+  <li class="active"><a href="#json" data-toggle="tab" ng-click="confirm = false">Firebase (JSON)</a></li>
+  <li><a href="#csv" data-toggle="tab">CSV</a></li>
 </ul>
 <div class="tab-content">
   <div class="tab-pane tab-pane-margin active" id="json">
@@ -9,5 +10,8 @@
       <button ng-click="delete()" ng-disabled="deleted" ng-show="!confirm" class="btn btn-danger">Remover tudo</button>
       <button ng-click="deleteConfirm()" ng-show="confirm" class="btn btn-danger">Confirmar</button>
     </div>
+  </div>
+  <div class="tab-pane tab-pane-margin" id="csv">
+    <pre class="pre-scrollable">{{ csv }}</pre>
   </div>
 </div>
