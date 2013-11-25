@@ -268,6 +268,7 @@ var createNewUser = function(id) {
 // Binds Firebase/AngularFire 
 meupontoModule.run(['$rootScope', 'angularFire', 'angularFireAuth',
     function($rootScope, angularFire, angularFireAuth) {
+        $rootScope.loggedInOut = false;
         initValues($rootScope);
         var ref = new Firebase(FIREBASE_URL);
         angularFireAuth.initialize(ref, {
@@ -285,6 +286,7 @@ meupontoModule.run(['$rootScope', 'angularFire', 'angularFireAuth',
         };
 
         $rootScope.$on('angularFireAuth:login', function(evt, user) {
+            $rootScope.loggedInOut = true;
             var ref = new Firebase(FIREBASE_URL + user.id);
             ref.once('value', function(snapshot) {
                 if (snapshot.val() === null) {
@@ -301,6 +303,7 @@ meupontoModule.run(['$rootScope', 'angularFire', 'angularFireAuth',
         });
 
         $rootScope.$on('angularFireAuth:logout', function(evt) {
+            $rootScope.loggedInOut = true;
             unbind($rootScope);
         });
     }

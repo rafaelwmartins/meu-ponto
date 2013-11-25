@@ -40,9 +40,9 @@
           </ul>
         </div>
       </div>
-      <div class="container main" ng-show="!user"><a href="#" ng-click="login()"><img src="img/login.png"></a></div>
-      <div class="container main" ng-show="user && !years"><img src="img/loader.gif"></div>
-      <div class="container main" ng-show="user && years" ng-view></div>
+      <div class="container main" ng-show="!loggedInOut || (user && !years)"><img src="img/loader.gif"></div>
+      <div class="container main" ng-show="loggedInOut && !user"><a href="#" ng-click="login()"><img src="img/login.png"></a></div>
+      <div class="container main" ng-show="loggedInOut && user && years" ng-view></div>
     </div>
     <div id="footer">
       <div class="container">
