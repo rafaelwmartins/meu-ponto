@@ -544,8 +544,18 @@ function EditCtrl($rootScope, $scope, $routeParams, $location) {
 EditCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$location'];
 
 function CreateCtrl($rootScope, $scope, $routeParams, $location) {
-    $scope.date = moment().format(DATE_TIME_FORMATS.DATE);
     $scope.adjust = $routeParams.adjust ? true : false;
+
+    var today = moment();
+    var year = today.format('YYYY');
+    var month = today.format('MM');
+    var day = today.format('DD');
+    if ($scope.adjust) {
+        day = day + '_';
+    }
+    if (!hasDay($rootScope, year, month, day)) {
+        $scope.date = today.format(DATE_TIME_FORMATS.DATE);
+    }
 
     $scope.create = function() {
         var date = moment($scope.date, DATE_TIME_FORMATS.DATE);
@@ -557,9 +567,6 @@ function CreateCtrl($rootScope, $scope, $routeParams, $location) {
         var day = date.format('DD');
         if ($scope.adjust) {
             day = day + '_';
-        }
-        if (hasDay($rootScope, year, month, day)) {
-            return;
         }
 
         if (allEmpty($scope.record)) {
