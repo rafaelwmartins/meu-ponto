@@ -1,6 +1,6 @@
 {
     "name": "meuponto",
-    "version": "1.10.0",
+    "version": "1.10.1",
     "description": "Easy way to manage working hours.",
     "homepage": "http://meuponto.site44.com",
     "author": "Rafael Martins",
@@ -19,6 +19,7 @@
         "grunt-contrib-cssmin": "~0.7.0",
         "grunt-combine": "~0.8.3",
         "grunt-contrib-csslint": "~0.1.2",
-        "grunt-contrib-jshint": "~0.7.1"
+        "grunt-contrib-jshint": "~0.7.1",
+        "grunt-manifest": "~0.4.0"
     }
 }

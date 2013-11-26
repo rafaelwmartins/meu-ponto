@@ -78,6 +78,25 @@ module.exports = function(grunt) {
         },
         jshint: {
             files: ['js/<%= pkg.name %>.js']
+        },
+        manifest: {
+            generate: {
+                options: {
+                    basePath: '<%= buildDest %>',
+                    verbose: false,
+                    timestamp: true
+                },
+                src: [
+                    'css/**/*',
+                    'favicon.ico',
+                    'fonts/**/*',
+                    'img/**/*',
+                    'index.html',
+                    'js/**/*',
+                    'partials/**/*'
+                ],
+                dest: '<%= buildDest %>manifest.appcache'
+            }
         }
     });
 
@@ -88,6 +107,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-combine');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-manifest');
 
     grunt.registerTask('default', function() {
         grunt.log.writeln('Available tasks:');
@@ -117,9 +137,9 @@ module.exports = function(grunt) {
         grunt.log.writeln('Firebase URL: ' + firebaseUrl);
         grunt.log.writeln('Minify: ' + minify);
         if (minify) {
-            grunt.task.run(['clean', 'copy:min', 'uglify', 'cssmin', 'combine:single']);
+            grunt.task.run(['clean', 'copy:min', 'uglify', 'cssmin', 'combine:single', 'manifest']);
         } else {
-            grunt.task.run(['clean', 'copy:min', 'copy:other', 'combine:single']);
+            grunt.task.run(['clean', 'copy:min', 'copy:other', 'combine:single', 'manifest']);
         }
     });
 };
