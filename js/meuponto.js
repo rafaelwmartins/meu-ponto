@@ -224,6 +224,10 @@ meupontoModule.config(['$routeProvider', '$locationProvider',
             controller: CreateCtrl,
             templateUrl: 'partials/detail.html'
         }).
+        when('/config', {
+            controller: ConfigCtrl,
+            templateUrl: 'partials/config.html'
+        }).
         when('/data', {
             controller: DataCtrl,
             templateUrl: 'partials/data.html'
@@ -236,12 +240,17 @@ meupontoModule.config(['$routeProvider', '$locationProvider',
 
 var initValues = function($rootScope) {
     $rootScope.years = null;
+    $rootScope.config = null;
     $rootScope.unbindRecords = null;
+    $rootScope.unbindConfig = null;
 };
 
 var bind = function(angularFire, $rootScope, id) {
-    angularFire(new Firebase(FIREBASE_URL + id + '/records'), $rootScope, 'years').then(function(unbind) {
-        $rootScope.unbindRecords = unbind;
+    angularFire(new Firebase(FIREBASE_URL + id + '/config'), $rootScope, 'config').then(function(unbind) {
+        $rootScope.unbindConfig = unbind;
+        angularFire(new Firebase(FIREBASE_URL + id + '/records'), $rootScope, 'years').then(function(unbind) {
+            $rootScope.unbindRecords = unbind;
+        });
     });
 };
 
@@ -259,6 +268,9 @@ var createNewUser = function(id) {
             last: {
                 value: 0
             }
+        },
+        config: {
+            round: true
         }
     }; // See note about AngularFire bug
     return users;
@@ -311,6 +323,22 @@ meupontoModule.run(['$rootScope', 'angularFire', 'angularFireAuth',
 
 // --- CONTROLLERS start ---
 // -------------------------
+
+function ConfigCtrl($rootScope, $scope, $location) {
+    $scope.$watch('config', function() {
+        $scope.round = $rootScope.config.round;
+    });
+
+    $scope.update = function() {
+        $rootScope.config.round = $scope.round;
+        goHome($location);
+    };
+
+    $scope.goBack = function() {
+        goHome($location);
+    };
+}
+ConfigCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
 function DataCtrl($rootScope, $scope, $location) {
     $scope.$watch('years', function() {
@@ -421,7 +449,7 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.exit2.display = getExitTime(partialRecord);
                 row.exit2.optimal = true;
             }
-            row.balance = getBalance(record, true);
+            row.balance = getBalance(record, $rootScope.config.round);
         }
         row.note = record.note;
         if (row.balance && row.balance.value) {
