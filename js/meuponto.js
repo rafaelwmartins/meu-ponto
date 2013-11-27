@@ -327,10 +327,12 @@ meupontoModule.run(['$rootScope', 'angularFire', 'angularFireAuth',
 function ConfigCtrl($rootScope, $scope, $location) {
     $scope.$watch('config', function() {
         $scope.round = $rootScope.config.round;
+        $scope.optimal = $rootScope.config.optimal;
     });
 
     $scope.update = function() {
         $rootScope.config.round = $scope.round;
+        $rootScope.config.optimal = $scope.optimal;
         goHome($location);
     };
 
@@ -420,34 +422,42 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.entry1.display = record.entry1;
                 row.entry1.optimal = false;
             } else {
-                row.entry1.display = moment(OFFICIAL_TIMES.ENTRY1, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
-                row.entry1.optimal = true;
+                if ($rootScope.config.optimal) {
+                    row.entry1.display = moment(OFFICIAL_TIMES.ENTRY1, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    row.entry1.optimal = true;
+                }
             }
             if (record && record.entry2 !== undefined && record.entry2 !== '') {
                 row.entry2.display = record.entry2;
                 row.entry2.optimal = false;
             } else {
-                row.entry2.display = moment(OFFICIAL_TIMES.ENTRY2, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
-                row.entry2.optimal = true;
+                if ($rootScope.config.optimal) {
+                    row.entry2.display = moment(OFFICIAL_TIMES.ENTRY2, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    row.entry2.optimal = true;
+                }
             }
             if (record && record.exit1 !== undefined && record.exit1 !== '') {
                 row.exit1.display = record.exit1;
                 row.exit1.optimal = false;
             } else {
-                row.exit1.display = moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME).subtract('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
-                row.exit1.optimal = true;
+                if ($rootScope.config.optimal) {
+                    row.exit1.display = moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME).subtract('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    row.exit1.optimal = true;
+                }
             }
             if (record && record.exit2 !== undefined && record.exit2 !== '') {
                 row.exit2.display = record.exit2;
                 row.exit2.optimal = false;
             } else {
-                var partialRecord = {
-                    entry1: row.entry1.display,
-                    entry2: row.entry2.display,
-                    exit1: row.exit1.display
-                };
-                row.exit2.display = getExitTime(partialRecord);
-                row.exit2.optimal = true;
+                if ($rootScope.config.optimal) {
+                    var partialRecord = {
+                        entry1: row.entry1.display,
+                        entry2: row.entry2.display,
+                        exit1: row.exit1.display
+                    };
+                    row.exit2.display = getExitTime(partialRecord);
+                    row.exit2.optimal = true;
+                }
             }
             row.balance = getBalance(record, $rootScope.config.round);
         }
