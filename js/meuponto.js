@@ -412,6 +412,19 @@ function ListCtrl($rootScope, $scope, $location) {
         return exitTime.format(DATE_TIME_FORMATS.TIME);
     };
 
+    var hasHole = function(record) {
+        var keys = ['entry1', 'exit1', 'entry2', 'exit2'];
+        var hasLast = true;
+        for (var i = 0; i < keys.length; i++) {
+            var isValid = record[keys[i]] !== undefined && record[keys[i]] !== '';
+            if (!hasLast && isValid) {
+                return true;
+            }
+            hasLast = isValid;
+        }
+        return false;
+    };
+
     $scope.getRow = function(record) {
         var row;
         if (record && record.adjust !== undefined) {
@@ -425,11 +438,13 @@ function ListCtrl($rootScope, $scope, $location) {
                 exit1: {},
                 exit2: {}
             };
+
+            var noHole = !hasHole(record);
             if (record && record.entry1 !== undefined && record.entry1 !== '') {
                 row.entry1.display = record.entry1;
                 row.entry1.optimal = false;
             } else {
-                if ($rootScope.config.optimal) {
+                if ($rootScope.config.optimal && noHole) {
                     if ($rootScope.config.round) {
                         row.entry1.display = moment(OFFICIAL_TIMES.ENTRY1, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
                     } else {
@@ -442,7 +457,7 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.entry2.display = record.entry2;
                 row.entry2.optimal = false;
             } else {
-                if ($rootScope.config.optimal) {
+                if ($rootScope.config.optimal && noHole) {
                     if ($rootScope.config.round) {
                         row.entry2.display = moment(OFFICIAL_TIMES.ENTRY2, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
                     } else {
@@ -455,7 +470,7 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.exit1.display = record.exit1;
                 row.exit1.optimal = false;
             } else {
-                if ($rootScope.config.optimal) {
+                if ($rootScope.config.optimal && noHole) {
                     if ($rootScope.config.round) {
                         row.exit1.display = moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME).subtract('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
                     } else {
@@ -468,7 +483,7 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.exit2.display = record.exit2;
                 row.exit2.optimal = false;
             } else {
-                if ($rootScope.config.optimal) {
+                if ($rootScope.config.optimal && noHole) {
                     var partialRecord = {
                         entry1: row.entry1.display,
                         entry2: row.entry2.display,
