@@ -375,13 +375,20 @@ function ListCtrl($rootScope, $scope, $location) {
         $scope.sum = 0;
     });
 
-    var getExitTime = function(partialRecord) {
+    var getExitTime = function(partialRecord, round) {
+        var currentTotal, timeToGo;
+        if (!round) {
+            currentTotal = moment(partialRecord.exit1, DATE_TIME_FORMATS.TIME).diff(moment(partialRecord.entry1, DATE_TIME_FORMATS.TIME));
+            timeToGo = OFFICIAL_TIMES.JOURNEY_DURATION - currentTotal;
+            return moment(partialRecord.entry2, DATE_TIME_FORMATS.TIME).add('ms', timeToGo).format(DATE_TIME_FORMATS.TIME);
+        }
+
         var entry1 = getRoundedTime(partialRecord.entry1, OFFICIAL_TIMES.ENTRY1, TOLERANCES.ENTRY);
         var entry2 = getRoundedTime(partialRecord.entry2, OFFICIAL_TIMES.ENTRY2, TOLERANCES.ENTRY);
         var exit1 = getRoundedTime(partialRecord.exit1, OFFICIAL_TIMES.EXIT1, TOLERANCES.ENTRY);
 
-        var currentTotal = moment(exit1, DATE_TIME_FORMATS.TIME).diff(moment(entry1, DATE_TIME_FORMATS.TIME));
-        var timeToGo = OFFICIAL_TIMES.JOURNEY_DURATION - TOLERANCES.TOTAL - currentTotal;
+        currentTotal = moment(exit1, DATE_TIME_FORMATS.TIME).diff(moment(entry1, DATE_TIME_FORMATS.TIME));
+        timeToGo = OFFICIAL_TIMES.JOURNEY_DURATION - TOLERANCES.TOTAL - currentTotal;
         var exitTime = moment(entry2, DATE_TIME_FORMATS.TIME).add('ms', timeToGo);
 
         var officialExitTime = moment(OFFICIAL_TIMES.EXIT2, DATE_TIME_FORMATS.TIME);
@@ -423,7 +430,11 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.entry1.optimal = false;
             } else {
                 if ($rootScope.config.optimal) {
-                    row.entry1.display = moment(OFFICIAL_TIMES.ENTRY1, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    if ($rootScope.config.round) {
+                        row.entry1.display = moment(OFFICIAL_TIMES.ENTRY1, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    } else {
+                        row.entry1.display = OFFICIAL_TIMES.ENTRY1;
+                    }
                     row.entry1.optimal = true;
                 }
             }
@@ -432,7 +443,11 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.entry2.optimal = false;
             } else {
                 if ($rootScope.config.optimal) {
-                    row.entry2.display = moment(OFFICIAL_TIMES.ENTRY2, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    if ($rootScope.config.round) {
+                        row.entry2.display = moment(OFFICIAL_TIMES.ENTRY2, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    } else {
+                        row.entry2.display = OFFICIAL_TIMES.ENTRY2;
+                    }
                     row.entry2.optimal = true;
                 }
             }
@@ -441,7 +456,11 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.exit1.optimal = false;
             } else {
                 if ($rootScope.config.optimal) {
-                    row.exit1.display = moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME).subtract('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    if ($rootScope.config.round) {
+                        row.exit1.display = moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME).subtract('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    } else {
+                        row.exit1.display = OFFICIAL_TIMES.EXIT1;
+                    }
                     row.exit1.optimal = true;
                 }
             }
@@ -455,7 +474,7 @@ function ListCtrl($rootScope, $scope, $location) {
                         entry2: row.entry2.display,
                         exit1: row.exit1.display
                     };
-                    row.exit2.display = getExitTime(partialRecord);
+                    row.exit2.display = getExitTime(partialRecord, $rootScope.config.round);
                     row.exit2.optimal = true;
                 }
             }
