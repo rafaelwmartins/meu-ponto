@@ -3,8 +3,11 @@ var meupontoModule = angular.module('meuponto', ['firebase']);
 
 // Constants
 // ---------
+var UPDATE_CHECK_INTERVAL = {
+    KEY: 'updateCheckInterval',
+    DEFAULT_VALUE: 43200000
+}; // 12 hours
 var INITIAL_DATE_DEFAULT_VALUE = '02/09/1986';
-var LOCAL_STORAGE_KEY = 'backup';
 var DATE_TIME_FORMATS = {
     TIME: 'HH:mm',
     DATE: 'DD/MM/YYYY'
@@ -276,10 +279,46 @@ var createNewUser = function(id) {
     return users;
 };
 
+// Loads the update check interval from the Local Storage
+var loadUpdateCheckInterval = function() {
+    var storage = window.localStorage;
+    var interval = storage.getItem(UPDATE_CHECK_INTERVAL.KEY);
+    if (interval === null) {
+        interval = UPDATE_CHECK_INTERVAL.DEFAULT_VALUE;
+        saveUpdateCheckInterval(interval);
+    }
+    return interval;
+};
+
+// Sets the update check interval on the Local Storage
+var saveUpdateCheckInterval = function(interval) {
+    var storage = window.localStorage;
+    storage.setItem(UPDATE_CHECK_INTERVAL.KEY, interval);
+};
+
 // Module init
 // Binds Firebase/AngularFire 
-meupontoModule.run(['$rootScope', 'angularFire', 'angularFireAuth',
-    function($rootScope, angularFire, angularFireAuth) {
+meupontoModule.run(['$window', '$rootScope', '$timeout', 'angularFire', 'angularFireAuth',
+    function($window, $rootScope, $timeout, angularFire, angularFireAuth) {
+        // App Cache
+        if ($window.applicationCache) {
+            $window.applicationCache.addEventListener('updateready', function(e) {
+                $rootScope.$apply(function() {
+                    $rootScope.updateReady = true;
+                });
+            });
+        }
+        var checkForUpdate = function() {
+            if ($window.applicationCache) {
+                $window.applicationCache.update();
+            }
+            $timeout(checkForUpdate, loadUpdateCheckInterval());
+        };
+        $timeout(checkForUpdate, loadUpdateCheckInterval());
+        $rootScope.applyUpdate = function() {
+            $window.location.reload();
+        };
+
         $rootScope.loggedInOut = false;
         initValues($rootScope);
         var ref = new Firebase(FIREBASE_URL);

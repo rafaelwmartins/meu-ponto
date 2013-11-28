@@ -43,7 +43,12 @@
       </div>
       <div class="container main" ng-show="!loggedInOut || (user && !years)"><img src="img/loader.gif"></div>
       <div class="container main" ng-show="loggedInOut && !user"><a href="#" ng-click="login()"><img src="img/login.png"></a></div>
-      <div class="container main" ng-show="loggedInOut && user && years" ng-view></div>
+      <div class="container main" ng-show="loggedInOut && user && years">
+        <div class="alert alert-success" ng-show="updateReady">
+          <strong>Nova vers&atilde;o!</strong> Clique <a class="alert-link" href="#" ng-click="applyUpdate()">aqui</a> para aplicar.
+        </div>
+        <div ng-view></div>
+      </div>
     </div>
     <div id="footer">
       <div class="container">
