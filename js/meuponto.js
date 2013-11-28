@@ -182,7 +182,10 @@ var formatRecordTimes = function(record) {
 };
 
 var getCSV = function(scope) {
-    var csv = "Dia,Entrada 1,Saída 1,Entrada 2,Saída 2,Nota";
+    if (!scope || !scope.years) {
+        return '';
+    }
+    var csv = 'Dia,Entrada 1,Saída 1,Entrada 2,Saída 2,Nota';
     for (var year in scope.years) {
         if (isNaN(year)) {
             continue;
@@ -365,8 +368,10 @@ meupontoModule.run(['$window', '$rootScope', '$timeout', 'angularFire', 'angular
 
 function ConfigCtrl($rootScope, $scope, $location) {
     $scope.$watch('config', function() {
-        $scope.round = $rootScope.config.round;
-        $scope.optimal = $rootScope.config.optimal;
+        if ($rootScope.config) {
+            $scope.round = $rootScope.config.round;
+            $scope.optimal = $rootScope.config.optimal;
+        }
     });
 
     $scope.update = function() {
