@@ -276,7 +276,8 @@ var createNewUser = function(id) {
             }
         },
         config: {
-            round: true
+            round: true,
+            optimal: true
         }
     }; // See note about AngularFire bug
     return users;
