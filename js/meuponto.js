@@ -264,6 +264,9 @@ var unbind = function($rootScope) {
     if ($rootScope.unbindRecords) {
         $rootScope.unbindRecords();
     }
+    if ($rootScope.unbindConfig) {
+        $rootScope.unbindConfig();
+    }
     initValues($rootScope);
 };
 
