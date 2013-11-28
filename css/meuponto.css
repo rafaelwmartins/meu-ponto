@@ -37,7 +37,7 @@ html, body {
 }
 
 .checkbox-bottom {
-  margin-top: 15px;
+  margin-top: 15px !important;
 }
 
 .tab-pane-margin {
