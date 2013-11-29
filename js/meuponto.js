@@ -247,8 +247,10 @@ meupontoModule.config(['$routeProvider', '$locationProvider',
 var initValues = function($rootScope) {
     $rootScope.years = null;
     $rootScope.config = null;
+    $rootScope.isOn = false;
     $rootScope.unbindRecords = null;
     $rootScope.unbindConfig = null;
+    $rootScope.unbindStatus = null;
 };
 
 var bind = function(angularFire, $rootScope, id) {
@@ -258,6 +260,9 @@ var bind = function(angularFire, $rootScope, id) {
             $rootScope.unbindRecords = unbind;
         });
     });
+    angularFire(new Firebase(FIREBASE_URL + '.info/connected'), $rootScope, 'isOn').then(function(unbind) {
+        $rootScope.unbindStatus = unbind;
+    });
 };
 
 var unbind = function($rootScope) {
@@ -266,6 +271,9 @@ var unbind = function($rootScope) {
     }
     if ($rootScope.unbindConfig) {
         $rootScope.unbindConfig();
+    }
+    if ($rootScope.unbindStatus) {
+        $rootScope.unbindStatus();
     }
     initValues($rootScope);
 };
