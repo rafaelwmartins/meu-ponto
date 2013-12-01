@@ -482,6 +482,16 @@ function ListCtrl($rootScope, $scope, $location) {
         return false;
     };
 
+    // Verifies if the first entry is valid (if it exists)
+    var isEntry1Valid = function(record) {
+        if (record && record.entry1) {
+            if (moment(record.entry1, DATE_TIME_FORMATS.TIME).isAfter(moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME))) {
+                return false;
+            }
+        }
+        return true;
+    };
+
     $scope.getRow = function(record) {
         var row;
         if (record && record.adjust !== undefined) {
@@ -496,12 +506,12 @@ function ListCtrl($rootScope, $scope, $location) {
                 exit2: {}
             };
 
-            var noHole = !hasHole(record);
+            var optimize = $rootScope.config.optimal && !hasHole(record) && isEntry1Valid(record);
             if (record && record.entry1 !== undefined && record.entry1 !== '') {
                 row.entry1.display = record.entry1;
                 row.entry1.optimal = false;
             } else {
-                if ($rootScope.config.optimal && noHole) {
+                if (optimize) {
                     if ($rootScope.config.round) {
                         row.entry1.display = moment(OFFICIAL_TIMES.ENTRY1, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
                     } else {
@@ -514,11 +524,19 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.entry2.display = record.entry2;
                 row.entry2.optimal = false;
             } else {
-                if ($rootScope.config.optimal && noHole) {
-                    if ($rootScope.config.round) {
-                        row.entry2.display = moment(OFFICIAL_TIMES.ENTRY2, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                if (optimize) {
+                    var optimizedEntry2;
+                    if (record && record.exit1) {
+                        var officialLunchDuration = moment(OFFICIAL_TIMES.ENTRY2, DATE_TIME_FORMATS.TIME).diff(moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME));
+                        optimizedEntry2 = moment(record.exit1, DATE_TIME_FORMATS.TIME).add(officialLunchDuration).format(DATE_TIME_FORMATS.TIME);
                     } else {
-                        row.entry2.display = OFFICIAL_TIMES.ENTRY2;
+                        optimizedEntry2 = OFFICIAL_TIMES.ENTRY2;
+                    }
+
+                    if ($rootScope.config.round) {
+                        row.entry2.display = moment(optimizedEntry2, DATE_TIME_FORMATS.TIME).add('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
+                    } else {
+                        row.entry2.display = optimizedEntry2;
                     }
                     row.entry2.optimal = true;
                 }
@@ -527,7 +545,7 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.exit1.display = record.exit1;
                 row.exit1.optimal = false;
             } else {
-                if ($rootScope.config.optimal && noHole) {
+                if (optimize) {
                     if ($rootScope.config.round) {
                         row.exit1.display = moment(OFFICIAL_TIMES.EXIT1, DATE_TIME_FORMATS.TIME).subtract('ms', TOLERANCES.ENTRY).format(DATE_TIME_FORMATS.TIME);
                     } else {
@@ -540,7 +558,7 @@ function ListCtrl($rootScope, $scope, $location) {
                 row.exit2.display = record.exit2;
                 row.exit2.optimal = false;
             } else {
-                if ($rootScope.config.optimal && noHole) {
+                if (optimize) {
                     var partialRecord = {
                         entry1: row.entry1.display,
                         entry2: row.entry2.display,
