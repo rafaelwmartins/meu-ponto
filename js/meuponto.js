@@ -203,7 +203,8 @@ var getCSV = function(scope) {
                 var exit1 = scope.years[year][month][day].exit1 || '';
                 var exit2 = scope.years[year][month][day].exit2 || '';
                 var note = scope.years[year][month][day].note || '';
-                csv = csv + '\n' + day + ',' + entry1 + ',' + exit1 + ',' + entry2 + ',' + exit2 + ',' + note;
+                var date = day + '/' + month + '/' + year;
+                csv = csv + '\n' + date + ',' + entry1 + ',' + exit1 + ',' + entry2 + ',' + exit2 + ',' + note;
             }
         }
     }
