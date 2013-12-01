@@ -665,6 +665,31 @@ function EditCtrl($rootScope, $scope, $routeParams, $location) {
 
     $scope.deleteConfirm = function() {
         delete $rootScope.years[year][month][day];
+
+        // Code to delete the garbage
+        // See note about AngularFire bug
+        var hasContent = false;
+        var key;
+        for (key in $rootScope.years[year][month]) {
+            if (!isNaN(key)) {
+                hasContent = true;
+                break;
+            }
+        }
+        if (!hasContent) {
+            delete $rootScope.years[year][month];
+            hasContent = false;
+            for (key in $rootScope.years[year]) {
+                if (!isNaN(key)) {
+                    hasContent = true;
+                    break;
+                }
+            }
+            if (!hasContent) {
+                delete $rootScope.years[year];
+            }
+        }
+
         goHome($location);
     };
 
