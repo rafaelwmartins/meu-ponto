@@ -373,6 +373,12 @@ meupontoModule.run(['$window', '$rootScope', '$timeout', 'angularFire', 'angular
             $rootScope.loggedInOut = true;
             unbind($rootScope);
         });
+
+        // Hides Bootstrap's navbar menu (for mobile)
+        $rootScope.$on('$routeChangeSuccess', function() {
+            $('#meuponto-navbar').collapse('hide');
+        });
+        $('#meuponto-navbar').collapse('hide');
     }
 ]);
 
@@ -380,6 +386,8 @@ meupontoModule.run(['$window', '$rootScope', '$timeout', 'angularFire', 'angular
 // -------------------------
 
 function ConfigCtrl($rootScope, $scope, $location) {
+    $rootScope.menu = '';
+
     $scope.$watch('config', function() {
         if ($rootScope.config) {
             $scope.round = $rootScope.config.round;
@@ -400,6 +408,8 @@ function ConfigCtrl($rootScope, $scope, $location) {
 ConfigCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
 function DataCtrl($rootScope, $scope, $location) {
+    $rootScope.menu = '';
+
     $scope.$watch('years', function() {
         $scope.csv = getCSV($scope);
     });
@@ -428,6 +438,8 @@ function DataCtrl($rootScope, $scope, $location) {
 DataCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
 function ListCtrl($rootScope, $scope, $location) {
+    $rootScope.menu = '';
+
     $scope.$watch('years', function() {
         $scope.sum = 0;
     });
@@ -616,6 +628,8 @@ function ListCtrl($rootScope, $scope, $location) {
 ListCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
 function EditCtrl($rootScope, $scope, $routeParams, $location) {
+    $rootScope.menu = '';
+
     var params = $routeParams.date.split('-');
     if (params.length != 3) {
         goHome($location);
@@ -719,6 +733,7 @@ EditCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$location'];
 
 function CreateCtrl($rootScope, $scope, $routeParams, $location) {
     $scope.adjust = $routeParams.adjust ? true : false;
+    $rootScope.menu = $scope.adjust ? 'adjust' : 'create';
 
     var today = moment();
     var year = today.format('YYYY');

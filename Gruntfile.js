@@ -14,7 +14,7 @@ module.exports = function(grunt) {
                     src: ['css/bootstrap.min.css', 'css/hint.min.css'],
                     dest: '<%= buildDest %>'
                 }, {
-                    src: ['favicon.ico'],
+                    src: ['favicon.ico', 'apple-touch-icon.png'],
                     dest: '<%= buildDest %>'
                 }, {
                     src: ['fonts/**/*'],

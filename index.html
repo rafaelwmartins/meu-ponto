@@ -2,9 +2,10 @@
 <html ng-app="meuponto" manifest="manifest.appcache">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Meu Ponto</title>
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="favicon.ico?v=__VERSION__">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=__VERSION__">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/hint.min.css" rel="stylesheet">
     <link href="css/meuponto-__VERSION_SUFIX__.css" rel="stylesheet">
@@ -26,26 +27,37 @@
       <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
           <div class="navbar-header">
+            <button ng-show="user" type="button" class="navbar-toggle" data-toggle="collapse" data-target="#meuponto-navbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
             <a class="navbar-brand" href="#/">Meu Ponto</a>
           </div>
-          <ul class="nav navbar-nav navbar-right" ng-show="user">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><div class="status-circle" ng-class="{ 'status-online': isOn, 'status-offline': !isOn }"></div>{{ user.name }} <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#/data">Dados</a></li>
-                <li><a href="#/config">Configura&ccedil;&otilde;es</a></li>
-                <li class="divider"></li>
-                <li><a href="#" ng-click="logout()">Sair</a></li>
-              </ul>
-            </li>
-          </ul>
+          <div class="collapse navbar-collapse" id="meuponto-navbar">
+            <ul class="nav navbar-nav" ng-show="user">
+              <li ng-class="{ 'active': (menu == 'create') }"><a href="#/create">Novo registro</a></li>
+              <li ng-class="{ 'active': (menu == 'adjust') }"><a href="#/create/adjust">Novo ajuste</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" ng-show="user">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><div class="status-circle" ng-class="{ 'status-online': isOn, 'status-offline': !isOn }"></div>{{ user.name }} <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#/data">Dados</a></li>
+                  <li><a href="#/config">Configura&ccedil;&otilde;es</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#" ng-click="logout()">Sair</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="container main" ng-show="!loggedInOut || (user && !years)"><img src="img/loader.gif"></div>
-      <div class="container main" ng-show="loggedInOut && !user"><a href="#" ng-click="login()"><img src="img/login.png"></a></div>
+      <div class="container main" ng-show="!loggedInOut || (user && !years)"><div class="loading"></div></div>
+      <div class="container main" ng-show="loggedInOut && !user"><div class="login-button cursor-pointer" ng-click="login()"></div></div>
       <div class="container main" ng-show="loggedInOut && user && years">
-        <div class="alert alert-success" ng-show="updateReady">
-          <strong>Nova vers&atilde;o!</strong> Clique <a class="alert-link" href="#" ng-click="applyUpdate()">aqui</a> para aplicar.
+        <div class="alert alert-success cursor-pointer" ng-show="updateReady" ng-click="applyUpdate()">
+          <strong>Nova vers&atilde;o!</strong> Clique aqui para aplicar.
         </div>
         <div ng-view></div>
       </div>
