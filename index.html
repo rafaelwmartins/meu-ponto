@@ -32,21 +32,25 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#/">Meu Ponto</a>
+            <a class="navbar-brand hidden-xs" href="#/">Meu Ponto</a>
+            <a class="navbar-brand visible-xs" href="#/">Meu Ponto<div class="status-circle status-right" ng-show="user" ng-class="{ 'status-online': isOn, 'status-offline': !isOn }"></div></a>
           </div>
           <div class="collapse navbar-collapse" id="meuponto-navbar">
             <ul class="nav navbar-nav" ng-show="user">
-              <li ng-class="{ 'active': (menu == 'create') }"><a href="#/create">Novo registro</a></li>
-              <li ng-class="{ 'active': (menu == 'adjust') }"><a href="#/create/adjust">Novo ajuste</a></li>
+              <li ng-class="{ 'active': (menu == 'create') }"><a href="#/create"><span class="glyphicon glyphicon-time icon-space"></span>Novo registro</a></li>
+              <li ng-class="{ 'active': (menu == 'adjust') }"><a href="#/create/adjust"><span class="glyphicon glyphicon-wrench icon-space"></span>Novo ajuste</a></li>
+              <li class="visible-xs" ng-class="{ 'active': (menu == 'data') }"><a href="#/data"><span class="glyphicon glyphicon-hdd icon-space"></span>Dados</a></li>
+              <li class="visible-xs" ng-class="{ 'active': (menu == 'config') }"><a href="#/config"><span class="glyphicon glyphicon-cog icon-space"></span>Configura&ccedil;&otilde;es</a></li>
+              <li class="visible-xs"><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out icon-space"></span>Sair - {{ user.name }}</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-show="user">
+            <ul class="nav navbar-nav navbar-right" ng-class="{ 'hidden-xs': user }" ng-show="user">
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><div class="status-circle" ng-class="{ 'status-online': isOn, 'status-offline': !isOn }"></div>{{ user.name }} <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><div class="status-circle status-left" ng-class="{ 'status-online': isOn, 'status-offline': !isOn }"></div>{{ user.name }} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#/data">Dados</a></li>
-                  <li><a href="#/config">Configura&ccedil;&otilde;es</a></li>
+                  <li ng-class="{ 'drop-selected': (menu == 'data') }"><a href="#/data"><span class="glyphicon glyphicon-hdd icon-space"></span>Dados</a></li>
+                  <li ng-class="{ 'drop-selected': (menu == 'config') }"><a href="#/config"><span class="glyphicon glyphicon-cog icon-space"></span>Configura&ccedil;&otilde;es</a></li>
                   <li class="divider"></li>
-                  <li><a href="#" ng-click="logout()">Sair</a></li>
+                  <li><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out icon-space"></span>Sair</a></li>
                 </ul>
               </li>
             </ul>

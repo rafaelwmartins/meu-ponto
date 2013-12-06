@@ -54,7 +54,6 @@ html, body {
   border-radius: 5px;
   width: 10px;
   height: 10px;
-  margin-right: 10px;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
 }
@@ -65,6 +64,14 @@ html, body {
 
 .status-offline {
   background-color: #999;
+}
+
+.status-left {
+  margin-right: 10px;
+}
+
+.status-right {
+  margin-left: 10px;
 }
 
 .login-button {
@@ -93,4 +100,16 @@ html, body {
   .loading {
     background-image: url('../img/loading@2x.gif');
   }
+}
+
+.icon-space {
+  margin-right: 10px;
+}
+
+.glyphicon-wrench:before {
+  content: "\e136";
+}
+
+.drop-selected {
+  background-color: #e7e7e7;
 }

@@ -386,7 +386,7 @@ meupontoModule.run(['$window', '$rootScope', '$timeout', 'angularFire', 'angular
 // -------------------------
 
 function ConfigCtrl($rootScope, $scope, $location) {
-    $rootScope.menu = '';
+    $rootScope.menu = 'config';
 
     $scope.$watch('config', function() {
         if ($rootScope.config) {
@@ -408,7 +408,7 @@ function ConfigCtrl($rootScope, $scope, $location) {
 ConfigCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
 function DataCtrl($rootScope, $scope, $location) {
-    $rootScope.menu = '';
+    $rootScope.menu = 'data';
 
     $scope.$watch('years', function() {
         $scope.csv = getCSV($scope);
