@@ -1,8 +1,8 @@
 <keybinding on="n" invoke="create(false)" />
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs" ng-show="hasRecords(years)">
   <li ng-init="lastYear = getLast(years)" ng-repeat="(year, months) in years" ng-class="{ 'active': lastYear == $index }" ng-hide="$last"><a href="#tab{{ year }}" data-toggle="tab">{{ year }}</a></li>
 </ul>
-<div class="tab-content">
+<div class="tab-content" ng-show="hasRecords(years)">
   <div ng-init="lastYear = getLast(years)" class="tab-pane tab-pane-margin" ng-class="{ 'active': lastYear == $index }" ng-repeat="(year, months) in years" ng-hide="$last" id="tab{{ year }}">
     <div class="panel-group" id="accordion{{ year }}">
       <div class="panel panel-default" ng-init="lastMonth = getLast(months)" ng-repeat="(month, days) in months" ng-hide="$last">

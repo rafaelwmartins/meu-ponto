@@ -619,6 +619,15 @@ function ListCtrl($rootScope, $scope, $location) {
         return index;
     };
 
+    $scope.hasRecords = function(obj) {
+        for (var key in obj) {
+            if (!isNaN(key)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     $scope.isControl = function(day) {
         if (day) {
             return day.slice(-1) === '_';
