@@ -867,6 +867,10 @@ meupontoModule.directive('recordTime', function() {
         require: 'ngModel',
         link: function(scope, elm, attrs, ctrl) {
             ctrl.$parsers.unshift(function(viewValue) {
+                if (!viewValue) {
+                    ctrl.$setValidity('recordTime', true);
+                    return '';
+                }
                 var time = moment(viewValue, DATE_TIME_FORMATS.TIMES);
                 if (!time || !time.isValid()) {
                     ctrl.$setValidity('recordTime', false);
