@@ -10,7 +10,8 @@ var UPDATE_CHECK_INTERVAL = {
 var INITIAL_DATE_DEFAULT_VALUE = '02/09/1986';
 var DATE_TIME_FORMATS = {
     TIME: 'HH:mm',
-    DATE: 'DD/MM/YYYY'
+    DATE: 'DD/MM/YYYY',
+    TIMES: ['HH:mm', 'HH-mm', 'HH mm']
 };
 var OFFICIAL_TIMES = {
     ENTRY1: '09:00',
@@ -172,7 +173,7 @@ var formatRecordTimes = function(record) {
         if (key === 'note') {
             continue;
         }
-        var hourMinute = moment(record[key], [DATE_TIME_FORMATS.TIME, 'HH-mm', 'HH mm']);
+        var hourMinute = moment(record[key], DATE_TIME_FORMATS.TIMES);
         if (hourMinute && hourMinute.isValid()) {
             record[key] = hourMinute.format(DATE_TIME_FORMATS.TIME);
         } else {
@@ -847,6 +848,40 @@ meupontoModule.directive('keybinding', function() {
         link: function(scope, element, attrs) {
             Mousetrap.bind(attrs.on, function() {
                 scope.$apply(scope.invoke);
+            });
+        }
+    };
+});
+
+meupontoModule.directive('recordTime', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            ctrl.$parsers.unshift(function(viewValue) {
+                var time = moment(viewValue, DATE_TIME_FORMATS.TIMES);
+                if (!time || !time.isValid()) {
+                    ctrl.$setValidity('recordTime', false);
+                    return undefined;
+                }
+                ctrl.$setValidity('recordTime', true);
+                return viewValue;
+            });
+        }
+    };
+});
+
+meupontoModule.directive('recordDate', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            ctrl.$parsers.unshift(function(viewValue) {
+                var date = moment(viewValue, DATE_TIME_FORMATS.DATE);
+                if (!date || !date.isValid()) {
+                    ctrl.$setValidity('recordDate', false);
+                    return undefined;
+                }
+                ctrl.$setValidity('recordDate', true);
+                return viewValue;
             });
         }
     };
