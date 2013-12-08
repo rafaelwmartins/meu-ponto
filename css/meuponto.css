@@ -55,6 +55,7 @@ html, body {
   width: 10px;
   height: 10px;
   -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
   background-clip: padding-box;
 }
 
