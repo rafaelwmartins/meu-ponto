@@ -93,7 +93,7 @@ html, body {
   background-image: url('../img/loading.gif');
 }
 
-@media (-webkit-min-device-pixel-ratio: 1.5) {
+@media (-webkit-min-device-pixel-ratio: 1.1) {
   .login-button {
     background-image: url('../img/login@2x.png');
   }
