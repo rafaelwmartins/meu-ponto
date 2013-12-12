@@ -107,10 +107,6 @@ html, body {
   margin-right: 10px;
 }
 
-.glyphicon-wrench:before {
-  content: "\e136";
-}
-
 .drop-selected {
   background-color: #e7e7e7;
 }
