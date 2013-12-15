@@ -97,6 +97,15 @@ module.exports = function(grunt) {
                 ],
                 dest: '<%= buildDest %>manifest.appcache'
             }
+        },
+        concat: {
+            options: {
+                separator: ';',
+            },
+            lib: {
+                src: ['lib/jquery-1.10.2.min.js', 'lib/angular-1.0.8.min.js', 'lib/firebase.min.js', 'lib/firebase-auth-client.min.js', 'lib/angularfire.min.js', 'lib/facebook-all.min.js', 'lib/moment-2.2.1.min.js', 'lib/moment-pt-br.min.js', 'lib/mousetrap.min.js', 'lib/bootstrap.min.js'],
+                dest: '<%= buildDest %>js/libs-<%= pkg.version %>.min.js'
+            }
         }
     });
 
@@ -108,6 +117,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-manifest');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
     grunt.registerTask('default', function() {
         grunt.log.writeln('Available tasks:');
@@ -137,9 +147,9 @@ module.exports = function(grunt) {
         grunt.log.writeln('Firebase URL: ' + firebaseUrl);
         grunt.log.writeln('Minify: ' + minify);
         if (minify) {
-            grunt.task.run(['clean', 'copy:min', 'uglify', 'cssmin', 'combine:single', 'manifest']);
+            grunt.task.run(['clean', 'copy:min', 'uglify', 'cssmin', 'combine:single', 'concat', 'manifest']);
         } else {
-            grunt.task.run(['clean', 'copy:min', 'copy:other', 'combine:single', 'manifest']);
+            grunt.task.run(['clean', 'copy:min', 'copy:other', 'combine:single', 'concat', 'manifest']);
         }
     });
 };
