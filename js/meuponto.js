@@ -187,27 +187,38 @@ var getCSV = function(scope) {
         return '';
     }
     var csv = 'Dia,Entrada 1,Saída 1,Entrada 2,Saída 2,Nota';
-    for (var year in scope.years) {
+    var year, month, day;
+    var entries = [];
+    for (year in scope.years) {
         if (isNaN(year)) {
             continue;
         }
-        for (var month in scope.years[year]) {
+        for (month in scope.years[year]) {
             if (isNaN(month)) {
                 continue;
             }
-            for (var day in scope.years[year][month]) {
+            for (day in scope.years[year][month]) {
                 if (isNaN(day)) {
                     continue;
                 }
-                var entry1 = scope.years[year][month][day].entry1 || '';
-                var entry2 = scope.years[year][month][day].entry2 || '';
-                var exit1 = scope.years[year][month][day].exit1 || '';
-                var exit2 = scope.years[year][month][day].exit2 || '';
-                var note = scope.years[year][month][day].note || '';
-                var date = day + '/' + month + '/' + year;
-                csv = csv + '\n' + date + ',' + entry1 + ',' + exit1 + ',' + entry2 + ',' + exit2 + ',' + note;
+                entries.push(year + '-' + month + '-' + day);
             }
         }
+    }
+    entries.sort();
+    var parts, entry1, entry2, exit1, exit2, note, date;
+    for (var i = 0; i < entries.length; i++) {
+        parts = entries[i].split('-');
+        year = parts[0];
+        month = parts[1];
+        day = parts[2];
+        entry1 = scope.years[year][month][day].entry1 || '';
+        entry2 = scope.years[year][month][day].entry2 || '';
+        exit1 = scope.years[year][month][day].exit1 || '';
+        exit2 = scope.years[year][month][day].exit2 || '';
+        note = scope.years[year][month][day].note || '';
+        date = day + '/' + month + '/' + year;
+        csv = csv + '\n' + date + ',' + entry1 + ',' + exit1 + ',' + entry2 + ',' + exit2 + ',' + note;
     }
     return csv;
 };
