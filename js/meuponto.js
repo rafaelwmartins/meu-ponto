@@ -899,4 +899,21 @@ meupontoModule.directive('recordDate', function() {
         }
     };
 });
+
+meupontoModule.directive('adjust', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            ctrl.$parsers.unshift(function(viewValue) {
+                pattern = /[^\d:+-]/g;
+                if (pattern.test(viewValue) || (viewValue !== '0' && getMinutes(viewValue) === 0)) {
+                    ctrl.$setValidity('adjust', false);
+                    return undefined;
+                }
+                ctrl.$setValidity('adjust', true);
+                return viewValue;
+            });
+        }
+    };
+});
 // --- DIRECTIVES end ---
