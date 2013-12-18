@@ -1,4 +1,5 @@
 <keybinding on="n" invoke="create(false)" />
+<keybinding on="e" invoke="editToday()" />
 <ul class="nav nav-tabs" ng-show="hasRecords(years)">
   <li ng-init="lastYear = getLast(years)" ng-repeat="(year, months) in years" ng-class="{ 'active': lastYear == $index }" ng-hide="$last"><a href="#tab{{ year }}" data-toggle="tab">{{ year }}</a></li>
 </ul>

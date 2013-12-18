@@ -622,6 +622,11 @@ function ListCtrl($rootScope, $scope, $location) {
         $location.path('/edit/' + id);
     };
 
+    $scope.editToday = function() {
+        var today = moment().format('YYYY-MM-DD');
+        $location.path('/edit/' + today);
+    };
+
     // Temporary ugly code to deal with AngularFire bug
     // --------------------------------------------------------------------------------------------
     // NOTE ABOUT ANGULARFIRE BUG:
