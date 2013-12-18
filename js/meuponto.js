@@ -26,6 +26,17 @@ var TOLERANCES = {
 };
 // ---------
 
+// Focus the fisrt empty input (of type text) using jQuery
+var focusFirstEmptyInput = function() {
+    var inputs = $('form input:text');
+    for (var i = 0; i < inputs.length; i++) {
+        if ($(inputs[i]).is(':visible') && $(inputs[i]).val() === '') {
+            $(inputs[i]).focus();
+            break;
+        }
+    }
+};
+
 // Tests if all entries of a record are valid
 var isValidRecord = function(record) {
     if (record === undefined || record === null) {
@@ -648,7 +659,7 @@ function ListCtrl($rootScope, $scope, $location) {
 }
 ListCtrl.$inject = ['$rootScope', '$scope', '$location'];
 
-function EditCtrl($rootScope, $scope, $routeParams, $location) {
+function EditCtrl($rootScope, $scope, $routeParams, $location, $timeout) {
     $rootScope.menu = '';
 
     var params = $routeParams.date.split('-');
@@ -749,10 +760,12 @@ function EditCtrl($rootScope, $scope, $routeParams, $location) {
     $scope.goBack = function() {
         goHome($location);
     };
-}
-EditCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$location'];
 
-function CreateCtrl($rootScope, $scope, $routeParams, $location) {
+    $timeout(focusFirstEmptyInput);
+}
+EditCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$location', '$timeout'];
+
+function CreateCtrl($rootScope, $scope, $routeParams, $location, $timeout) {
     $scope.adjust = $routeParams.adjust ? true : false;
     $rootScope.menu = $scope.adjust ? 'adjust' : 'create';
 
@@ -821,8 +834,10 @@ function CreateCtrl($rootScope, $scope, $routeParams, $location) {
     $scope.goBack = function() {
         goHome($location);
     };
+
+    $timeout(focusFirstEmptyInput);
 }
-CreateCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$location'];
+CreateCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$location', '$timeout'];
 // --- CONTROLLERS end ---
 
 // --- FILTERS start ---
