@@ -624,7 +624,15 @@ function ListCtrl($rootScope, $scope, $location) {
 
     $scope.editToday = function() {
         var today = moment().format('YYYY-MM-DD');
-        $location.path('/edit/' + today);
+        var params = today.split('-');
+        var year = params[0];
+        var month = params[1];
+        var day = params[2];
+        if (!hasDay($rootScope, year, month, day)) {
+            $scope.create(false);
+        } else {
+            $scope.edit(today);
+        }
     };
 
     // Temporary ugly code to deal with AngularFire bug
