@@ -12,36 +12,64 @@
         </div>
         <div id="{{ year + month }}" class="panel-collapse collapse" ng-class="{ 'in': lastYear == $parent.$index && lastMonth == $index }">
           <div class="panel-body">
-            <div class="table-responsive">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th>Dia</th>
-                  <th>Entrada 1</th>
-                  <th>Sa&iacute;da 1</th>
-                  <th>Entrada 2</th>
-                  <th>Sa&iacute;da 2</th>
-                  <th>Nota</th>
-                  <th>Saldo</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="cursor-pointer" ng-repeat="(day, record) in days" ng-class="{ 'active': isControl(day) }" ng-hide="$last" ng-click="edit( year + '-' + month + '-' + day )">
-                  <td ng-init="row = getRow(record)"><span class="hint--top" data-hint="{{ year + month + day | dayOfWeek }}"><strong>{{ day | dayWithoutMark }}</strong></span></td>
-                  <td><span ng-class="{ 'text-muted': row.entry1.optimal }">{{ row.entry1.display }}</span></td>
-                  <td><span ng-class="{ 'text-muted': row.exit1.optimal }">{{ row.exit1.display }}</span></td>
-                  <td><span ng-class="{ 'text-muted': row.entry2.optimal }">{{ row.entry2.display }}</span></td>
-                  <td><span ng-class="{ 'text-muted': row.exit2.optimal }">{{ row.exit2.display }}</span></td>
-                  <td>
-                    <span ng-show="row.note" class="hint--top" data-hint="{{ row.note }}"><span class="glyphicon glyphicon-file"></span></span>
-                    <span ng-show="!row.note" class="glyphicon glyphicon-file text-muted"></span>
-                  </td>
-                  <td><span class="label" ng-class="{ 'label-success': row.balance.value >= 0, 'label-danger': row.balance.value < 0 }">{{ row.balance.display }}</span></td>
-                  <td><span class="label" ng-class="{ 'label-success': row.total.value >= 0, 'label-danger': row.total.value < 0 }">{{ row.total.display }}</span></td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="hidden-xs">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Dia</th>
+                    <th>Entrada 1</th>
+                    <th>Sa&iacute;da 1</th>
+                    <th>Entrada 2</th>
+                    <th>Sa&iacute;da 2</th>
+                    <th>Nota</th>
+                    <th>Saldo</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="cursor-pointer" ng-repeat="(day, record) in days" ng-class="{ 'active': isControl(day) }" ng-hide="$last" ng-click="edit( year + '-' + month + '-' + day )">
+                    <td ng-init="row = getRow(record)"><span class="hint--top" data-hint="{{ year + month + day | dayOfWeek }}"><strong>{{ day | dayWithoutMark }}</strong></span></td>
+                    <td><span ng-class="{ 'text-muted': row.entry1.optimal }">{{ row.entry1.display }}</span></td>
+                    <td><span ng-class="{ 'text-muted': row.exit1.optimal }">{{ row.exit1.display }}</span></td>
+                    <td><span ng-class="{ 'text-muted': row.entry2.optimal }">{{ row.entry2.display }}</span></td>
+                    <td><span ng-class="{ 'text-muted': row.exit2.optimal }">{{ row.exit2.display }}</span></td>
+                    <td>
+                      <span ng-show="row.note" class="hint--top" data-hint="{{ row.note }}"><span class="glyphicon glyphicon-file"></span></span>
+                      <span ng-show="!row.note" class="glyphicon glyphicon-file text-muted"></span>
+                    </td>
+                    <td><span class="label" ng-class="{ 'label-success': row.balance.value >= 0, 'label-danger': row.balance.value < 0 }">{{ row.balance.display }}</span></td>
+                    <td><span class="label" ng-class="{ 'label-success': row.total.value >= 0, 'label-danger': row.total.value < 0 }">{{ row.total.display }}</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="visible-xs">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Dia</th>
+                    <th>Entr.</th>
+                    <th>Saíd.</th>
+                    <th>Saldo</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="(day, record) in days" ng-class="{ 'active': isControl(day) }" ng-hide="$last" ng-click="edit( year + '-' + month + '-' + day )">
+                    <td class="v-aligned" ng-init="row = getRow(record)"><span><strong>{{ day | dayWithoutMark }}</strong></span></td>
+                    <td>
+                      <span ng-class="{ 'text-muted': row.entry1.optimal }">{{ row.entry1.display }}</span><br>
+                      <span ng-class="{ 'text-muted': row.entry2.optimal }">{{ row.entry2.display }}</span>
+                    </td>
+                    <td>
+                      <span ng-class="{ 'text-muted': row.exit1.optimal }">{{ row.exit1.display }}</span><br>
+                      <span ng-class="{ 'text-muted': row.exit2.optimal }">{{ row.exit2.display }}</span>
+                    </td>
+                    <td class="v-aligned"><span class="label" ng-class="{ 'label-success': row.balance.value >= 0, 'label-danger': row.balance.value < 0 }">{{ row.balance.display }}</span></td>
+                    <td class="v-aligned"><span class="label" ng-class="{ 'label-success': row.total.value >= 0, 'label-danger': row.total.value < 0 }">{{ row.total.display }}</span></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

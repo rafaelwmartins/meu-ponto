@@ -110,3 +110,7 @@ html, body {
 .drop-selected {
   background-color: #e7e7e7;
 }
+
+.v-aligned {
+  vertical-align: middle !important;
+}
