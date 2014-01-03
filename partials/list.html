@@ -56,7 +56,7 @@
                 </thead>
                 <tbody>
                   <tr ng-repeat="(day, record) in days" ng-class="{ 'active': isControl(day) }" ng-hide="$last" ng-click="edit( year + '-' + month + '-' + day )">
-                    <td class="v-aligned" ng-init="row = getRow(record)"><span><strong>{{ day | dayWithoutMark }}</strong></span></td>
+                    <td class="v-aligned" ng-init="row = getRow(year, month, day)"><span><strong>{{ day | dayWithoutMark }}</strong></span></td>
                     <td>
                       <span ng-class="{ 'text-muted': row.entry1.optimal }">{{ row.entry1.display }}</span><br>
                       <span ng-class="{ 'text-muted': row.entry2.optimal }">{{ row.entry2.display }}</span>
