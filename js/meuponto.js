@@ -234,6 +234,14 @@ var getCSV = function(scope) {
     return csv;
 };
 
+// Checks if the string represents a control entry (a day number ending with an underscore)
+var isControl = function(day) {
+    if (day) {
+        return day.slice(-1) === '_';
+    }
+    return false;
+};
+
 // Routes configuration
 meupontoModule.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
@@ -270,6 +278,7 @@ meupontoModule.config(['$routeProvider', '$locationProvider',
 
 var initValues = function($rootScope) {
     $rootScope.years = null;
+    $rootScope.balances = null;
     $rootScope.config = null;
     $rootScope.isOn = false;
     $rootScope.unbindRecords = null;
@@ -463,8 +472,56 @@ DataCtrl.$inject = ['$rootScope', '$scope', '$location'];
 function ListCtrl($rootScope, $scope, $location) {
     $rootScope.menu = '';
 
-    $scope.$watch('years', function() {
-        $scope.sum = 0;
+    $scope.$watch('years', function(newValue, oldValue) {
+        if (newValue === oldValue) {
+            return;
+        }
+        $rootScope.balances = {};
+        var year, month, day;
+        var entries = [];
+        for (year in $scope.years) {
+            if (isNaN(year)) {
+                continue;
+            }
+            $rootScope.balances[year] = {};
+            for (month in $scope.years[year]) {
+                if (isNaN(month)) {
+                    continue;
+                }
+                $rootScope.balances[year][month] = {};
+                for (day in $scope.years[year][month]) {
+                    if (isNaN(day) && !isControl(day)) {
+                        continue;
+                    }
+                    entries.push(year + '-' + month + '-' + day);
+                }
+            }
+        }
+        entries.sort();
+        var parts, record, currentBalance;
+        var totalBalance = 0;
+        for (var i = 0; i < entries.length; i++) {
+            parts = entries[i].split('-');
+            year = parts[0];
+            month = parts[1];
+            day = parts[2];
+            record = $scope.years[year][month][day];
+            if (isControl(day)) {
+                currentBalance = record.adjust === 0 ? getBalanceObject(-totalBalance, 'm') : getBalanceObject(record.adjust, 'm');
+                totalBalance += currentBalance.value;
+            } else {
+                if (record.entry1 && record.entry2 && record.exit1 && record.exit2) {
+                    currentBalance = getBalance(record, $rootScope.config.round);
+                    totalBalance += currentBalance.value;
+                } else {
+                    currentBalance = 0;
+                }
+            }
+            $rootScope.balances[year][month][day] = {
+                balance: currentBalance,
+                total: getBalanceObject(totalBalance, 'm')
+            };
+        }
     });
 
     var getExitTime = function(partialRecord, round) {
@@ -527,12 +584,14 @@ function ListCtrl($rootScope, $scope, $location) {
         return true;
     };
 
-    $scope.getRow = function(record) {
+    $scope.getRow = function(year, month, day) {
+        if (isNaN(year) || isNaN(month) || (isNaN(day) && !isControl(day))) {
+            return null;
+        }
+        var record = $scope.years[year][month][day];
         var row;
         if (record && record.adjust !== undefined) {
-            row = {
-                balance: record.adjust === 0 ? getBalanceObject(-$scope.sum, 'm') : getBalanceObject(record.adjust, 'm')
-            };
+            row = {};
         } else {
             row = {
                 entry1: {},
@@ -603,13 +662,13 @@ function ListCtrl($rootScope, $scope, $location) {
                     row.exit2.optimal = true;
                 }
             }
-            row.balance = getBalance(record, $rootScope.config.round);
+        }
+
+        if ($scope.balances && $scope.balances[year] && $scope.balances[year][month] && $scope.balances[year][month][day]) {
+            row.balance = $scope.balances[year][month][day].balance;
+            row.total = $scope.balances[year][month][day].total;
         }
         row.note = record.note;
-        if (row.balance && row.balance.value) {
-            $scope.sum += row.balance.value;
-        }
-        row.total = getBalanceObject($scope.sum, 'm');
         return row;
     };
 
@@ -664,10 +723,7 @@ function ListCtrl($rootScope, $scope, $location) {
     };
 
     $scope.isControl = function(day) {
-        if (day) {
-            return day.slice(-1) === '_';
-        }
-        return false;
+        return isControl(day);
     };
 }
 ListCtrl.$inject = ['$rootScope', '$scope', '$location'];

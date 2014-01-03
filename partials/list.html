@@ -28,7 +28,7 @@
                 </thead>
                 <tbody>
                   <tr class="cursor-pointer" ng-repeat="(day, record) in days" ng-class="{ 'active': isControl(day) }" ng-hide="$last" ng-click="edit( year + '-' + month + '-' + day )">
-                    <td ng-init="row = getRow(record)"><span class="hint--top" data-hint="{{ year + month + day | dayOfWeek }}"><strong>{{ day | dayWithoutMark }}</strong></span></td>
+                    <td ng-init="row = getRow(year, month, day)"><span class="hint--top" data-hint="{{ year + month + day | dayOfWeek }}"><strong>{{ day | dayWithoutMark }}</strong></span></td>
                     <td><span ng-class="{ 'text-muted': row.entry1.optimal }">{{ row.entry1.display }}</span></td>
                     <td><span ng-class="{ 'text-muted': row.exit1.optimal }">{{ row.exit1.display }}</span></td>
                     <td><span ng-class="{ 'text-muted': row.entry2.optimal }">{{ row.entry2.display }}</span></td>
