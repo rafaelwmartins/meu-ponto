@@ -114,3 +114,7 @@ html, body {
 .v-aligned {
   vertical-align: middle !important;
 }
+
+.has-note {
+  text-decoration: underline;
+}
