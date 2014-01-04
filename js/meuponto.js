@@ -5,9 +5,8 @@ var meupontoModule = angular.module('meuponto', ['firebase']);
 // ---------
 var UPDATE_CHECK_INTERVAL = {
     KEY: 'updateCheckInterval',
-    DEFAULT_VALUE: 43200000
-}; // 12 hours
-var INITIAL_DATE_DEFAULT_VALUE = '02/09/1986';
+    DEFAULT_VALUE: 14400000
+}; // 4 hours
 var DATE_TIME_FORMATS = {
     TIME: 'HH:mm',
     DATE: 'DD/MM/YYYY',
@@ -320,7 +319,7 @@ var createNewUser = function(id) {
             }
         },
         config: {
-            round: true,
+            round: false,
             optimal: true
         }
     }; // See note about AngularFire bug
