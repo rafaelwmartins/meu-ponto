@@ -506,8 +506,13 @@ function ListCtrl($rootScope, $scope, $location) {
             day = parts[2];
             record = $scope.years[year][month][day];
             if (isControl(day)) {
-                currentBalance = record.adjust === 0 ? getBalanceObject(-totalBalance, 'm') : getBalanceObject(record.adjust, 'm');
-                totalBalance += currentBalance.value;
+                if (record.adjustTotalBalance) {
+                    currentBalance = getBalanceObject(record.adjust - totalBalance, 'm');
+                    totalBalance = record.adjust;
+                } else {
+                    currentBalance = record.adjust === 0 ? getBalanceObject(-totalBalance, 'm') : getBalanceObject(record.adjust, 'm');
+                    totalBalance += currentBalance.value;
+                }
             } else {
                 if (record.entry1 && record.entry2 && record.exit1 && record.exit2) {
                     currentBalance = getBalance(record, $rootScope.config.round);
@@ -753,8 +758,10 @@ function EditCtrl($rootScope, $scope, $routeParams, $location, $timeout) {
     }
 
     if ($scope.adjust) {
+        var adjustTotalBalance = $rootScope.years[year][month][day].adjustTotalBalance === true ? true : false;
         $scope.record = {
             adjust: getFormattedTime($rootScope.years[year][month][day].adjust, true),
+            adjustTotalBalance: adjustTotalBalance,
             note: $rootScope.years[year][month][day].note
         };
     } else {
@@ -776,6 +783,7 @@ function EditCtrl($rootScope, $scope, $routeParams, $location, $timeout) {
         if ($scope.adjust) {
             $rootScope.years[year][month][day] = {
                 adjust: getMinutes($scope.record.adjust),
+                adjustTotalBalance: $scope.record.adjustTotalBalance,
                 note: $scope.record.note
             };
         } else {

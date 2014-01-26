@@ -42,6 +42,15 @@
       <input name="note" type="text" class="form-control mousetrap" placeholder="Nota" ng-model="record.note">
     </div>
   </div>
+  <div ng-show="adjust" class="form-group">
+    <div class="col-lg-offset-2 col-lg-4">
+      <div class="checkbox">
+        <label>
+          <input name="adjustTotalBalance" type="checkbox" ng-model="record.adjustTotalBalance"> Valor do saldo total
+        </label>
+      </div>
+    </div>
+  </div>
   <div class="form-group">
     <div class="form-buttons col-lg-offset-2 col-lg-6">
       <a ng-click="goBack()" class="btn btn-default">Cancelar</a>
