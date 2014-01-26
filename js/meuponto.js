@@ -416,7 +416,7 @@ meupontoModule.run(['$window', '$rootScope', '$timeout', 'angularFire', 'angular
 // --- CONTROLLERS start ---
 // -------------------------
 
-function ConfigCtrl($rootScope, $scope, $location) {
+function ConfigCtrl($window, $rootScope, $scope, $location) {
     $rootScope.menu = 'config';
 
     $scope.$watch('config', function() {
@@ -429,14 +429,15 @@ function ConfigCtrl($rootScope, $scope, $location) {
     $scope.update = function() {
         $rootScope.config.round = $scope.round;
         $rootScope.config.optimal = $scope.optimal;
-        goHome($location);
+        // Forces reload on first page
+        $window.location.href = $window.location.pathname;
     };
 
     $scope.goBack = function() {
         goHome($location);
     };
 }
-ConfigCtrl.$inject = ['$rootScope', '$scope', '$location'];
+ConfigCtrl.$inject = ['$window', '$rootScope', '$scope', '$location'];
 
 function DataCtrl($rootScope, $scope, $location) {
     $rootScope.menu = 'data';
