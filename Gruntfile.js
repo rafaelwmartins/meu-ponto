@@ -91,7 +91,6 @@ module.exports = function(grunt) {
                     'favicon.ico',
                     'fonts/**/*',
                     'img/**/*',
-                    'index.html',
                     'js/**/*',
                     'partials/**/*'
                 ],
