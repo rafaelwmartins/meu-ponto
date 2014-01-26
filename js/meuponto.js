@@ -68,7 +68,7 @@ var getRoundedTime = function(time, officialTime, tolerance) {
 // Returns the number of minutes
 // Examples: '26:30' -> 1590, '200' -> 200
 var getMinutes = function(formattedTime) {
-    var str = formattedTime.trim();
+    var str = formattedTime ? formattedTime.trim() : "0";
     var totalMinutes = 0;
     if (str.indexOf(':') !== -1) {
         var negative = str[0] === '-';
