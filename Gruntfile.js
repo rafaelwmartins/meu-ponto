@@ -30,19 +30,16 @@ module.exports = function(grunt) {
                     dest: '<%= buildDest %>'
                 }]
             },
-            other: {
+            css: {
                 files: [{
                     src: ['css/meuponto.css'],
                     dest: '<%= buildDest %>css/<%= pkg.name %>-<%= pkg.version %>.css'
-                }, {
-                    src: ['js/meuponto.js'],
-                    dest: '<%= buildDest %>js/<%= pkg.name %>-<%= pkg.version %>.js'
                 }]
             }
         },
         uglify: {
             build: {
-                src: 'js/<%= pkg.name %>.js',
+                src: 'js/**/*',
                 dest: '<%= buildDest %>js/<%= pkg.name %>-<%= pkg.version %>.min.js'
             }
         },
@@ -104,6 +101,10 @@ module.exports = function(grunt) {
             lib: {
                 src: ['lib/jquery-1.10.2.min.js', 'lib/angular-1.0.8.min.js', 'lib/firebase.min.js', 'lib/firebase-auth-client.min.js', 'lib/angularfire.min.js', 'lib/facebook-all.min.js', 'lib/moment-2.2.1.min.js', 'lib/moment-pt-br.min.js', 'lib/mousetrap.min.js', 'lib/bootstrap.min.js'],
                 dest: '<%= buildDest %>js/libs-<%= pkg.version %>.min.js'
+            },
+            js: {
+                src: ['js/**/*'],
+                dest: '<%= buildDest %>js/<%= pkg.name %>-<%= pkg.version %>.js'
             }
         }
     });
@@ -146,9 +147,9 @@ module.exports = function(grunt) {
         grunt.log.writeln('Firebase URL: ' + firebaseUrl);
         grunt.log.writeln('Minify: ' + minify);
         if (minify) {
-            grunt.task.run(['clean', 'copy:min', 'uglify', 'cssmin', 'combine:single', 'concat', 'manifest']);
+            grunt.task.run(['clean', 'copy:min', 'cssmin', 'uglify', 'combine:single', 'concat:lib', 'manifest']);
         } else {
-            grunt.task.run(['clean', 'copy:min', 'copy:other', 'combine:single', 'concat', 'manifest']);
+            grunt.task.run(['clean', 'copy:min', 'copy:css', 'concat:js', 'combine:single', 'concat:lib', 'manifest']);
         }
     });
 };

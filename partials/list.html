@@ -1,16 +1,16 @@
 <keybinding on="mod+enter" invoke="create(false)" />
 <keybinding on="mod+shift+enter" invoke="editToday()" />
-<ul class="nav nav-tabs" ng-show="hasRecords(years)">
-  <li ng-init="lastYear = getLast(years)" ng-repeat="(year, months) in years" ng-class="{ 'active': lastYear == $index }" ng-hide="$last"><a href="#tab{{ year }}" data-toggle="tab">{{ year }}</a></li>
+<ul class="nav nav-tabs" ng-show="hasRecords(rows)">
+  <li ng-repeat="(year, months) in rows" ng-class="{ 'active': $last }"><a href="#tab{{ year }}" data-toggle="tab">{{ year }}</a></li>
 </ul>
-<div class="tab-content" ng-show="hasRecords(years)">
-  <div ng-init="lastYear = getLast(years)" class="tab-pane tab-pane-margin" ng-class="{ 'active': lastYear == $index }" ng-repeat="(year, months) in years" ng-hide="$last" id="tab{{ year }}">
+<div class="tab-content" ng-show="hasRecords(rows)">
+  <div class="tab-pane tab-pane-margin" ng-class="{ 'active': $last }" ng-repeat="(year, months) in rows" id="tab{{ year }}">
     <div class="panel-group" id="accordion{{ year }}">
-      <div class="panel panel-default" ng-init="lastMonth = getLast(months)" ng-repeat="(month, days) in months" ng-hide="$last">
+      <div class="panel panel-default" ng-repeat="(month, days) in months">
         <div class="panel-heading">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{ year }}" href="#{{ year + month }}">{{ month | monthName }}</a>
         </div>
-        <div id="{{ year + month }}" class="panel-collapse collapse" ng-class="{ 'in': lastYear == $parent.$index && lastMonth == $index }">
+        <div id="{{ year + month }}" class="panel-collapse collapse" ng-class="{ 'in': $parent.$last && $last }">
           <div class="panel-body">
             <div class="hidden-xs">
               <table class="table table-hover">
@@ -27,8 +27,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="cursor-pointer" ng-repeat="(day, record) in days" ng-class="{ 'active': isControl(day) }" ng-hide="$last" ng-click="edit( year + '-' + month + '-' + day )">
-                    <td ng-init="row = getRow(year, month, day)"><span class="hint--top" data-hint="{{ year + month + day | dayOfWeek }}"><strong>{{ day | dayWithoutMark }}</strong></span></td>
+                  <tr class="cursor-pointer" ng-repeat="(day, row) in days" ng-class="{ 'active': isControl(day) }" ng-click="edit( year + '-' + month + '-' + day )">
+                    <td><span class="hint--top" data-hint="{{ year + month + day | dayOfWeek }}"><strong>{{ day | dayWithoutMark }}</strong></span></td>
                     <td><span ng-class="{ 'text-muted': row.entry1.optimal }">{{ row.entry1.display }}</span></td>
                     <td><span ng-class="{ 'text-muted': row.exit1.optimal }">{{ row.exit1.display }}</span></td>
                     <td><span ng-class="{ 'text-muted': row.entry2.optimal }">{{ row.entry2.display }}</span></td>
@@ -55,8 +55,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="(day, record) in days" ng-class="{ 'active': isControl(day) }" ng-hide="$last" ng-click="edit( year + '-' + month + '-' + day )">
-                    <td class="v-aligned" ng-init="row = getRow(year, month, day)" ng-class="{ 'has-note': row.note }" ><span><strong>{{ day | dayWithoutMark }}</strong></span></td>
+                  <tr ng-repeat="(day, row) in days" ng-class="{ 'active': isControl(day) }" ng-click="edit( year + '-' + month + '-' + day )">
+                    <td class="v-aligned" ng-class="{ 'has-note': row.note }" ><span><strong>{{ day | dayWithoutMark }}</strong></span></td>
                     <td>
                       <span ng-class="{ 'text-muted': row.entry1.optimal }">{{ row.entry1.display }}</span><br>
                       <span ng-class="{ 'text-muted': row.entry2.optimal }">{{ row.entry2.display }}</span>
