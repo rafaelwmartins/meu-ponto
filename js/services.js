@@ -24,15 +24,14 @@ meupontoServices.factory('configuration', [
             tolerances: {
                 entry: 300000,
                 total: 600000
-            },
-            firebaseUrl: FIREBASE_URL
+            }
         };
         return configuration;
     }
 ]);
 
-meupontoServices.factory('meupontoFire', ['$rootScope', 'angularFire', 'configuration',
-    function($rootScope, angularFire, configuration) {
+meupontoServices.factory('meupontoFire', ['$rootScope', 'angularFire',
+    function($rootScope, angularFire) {
         var meupontoFire = {
 
             initValues: function() {
@@ -46,13 +45,13 @@ meupontoServices.factory('meupontoFire', ['$rootScope', 'angularFire', 'configur
             },
 
             bind: function(id) {
-                angularFire(new Firebase(configuration.firebaseUrl + id + '/config'), $rootScope, 'config').then(function(unbind) {
+                angularFire(new Firebase(FIREBASE_URL + id + '/config'), $rootScope, 'config').then(function(unbind) {
                     $rootScope.unbindConfig = unbind;
-                    angularFire(new Firebase(configuration.firebaseUrl + id + '/records'), $rootScope, 'years').then(function(unbind) {
+                    angularFire(new Firebase(FIREBASE_URL + id + '/records'), $rootScope, 'years').then(function(unbind) {
                         $rootScope.unbindRecords = unbind;
                     });
                 });
-                angularFire(new Firebase(configuration.firebaseUrl + '.info/connected'), $rootScope, 'isOn').then(function(unbind) {
+                angularFire(new Firebase(FIREBASE_URL + '.info/connected'), $rootScope, 'isOn').then(function(unbind) {
                     $rootScope.unbindStatus = unbind;
                 });
             },
@@ -91,23 +90,6 @@ meupontoServices.factory('meupontoFire', ['$rootScope', 'angularFire', 'configur
                     }
                 };
                 return users;
-            },
-
-            // Sets the update check interval on the Local Storage
-            saveUpdateCheckInterval: function(interval) {
-                var storage = window.localStorage;
-                storage.setItem(configuration.updateCheckInterval.key, interval);
-            },
-
-            // Loads the update check interval from the Local Storage
-            loadUpdateCheckInterval: function() {
-                var storage = window.localStorage;
-                var interval = storage.getItem(configuration.updateCheckInterval.key);
-                if (interval === null) {
-                    interval = configuration.updateCheckInterval.defaultValue;
-                    this.saveUpdateCheckInterval(interval);
-                }
-                return interval;
             }
         };
         return meupontoFire;

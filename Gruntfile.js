@@ -26,8 +26,17 @@ module.exports = function(grunt) {
                     src: ['js/bootstrap.min.js'],
                     dest: '<%= buildDest %>'
                 }, {
-                    src: ['partials/**/*'],
-                    dest: '<%= buildDest %>'
+                    src: ['partials/config.html'],
+                    dest: '<%= buildDest %>partials/config-<%= pkg.version %>.html'
+                }, {
+                    src: ['partials/data.html'],
+                    dest: '<%= buildDest %>partials/data-<%= pkg.version %>.html'
+                }, {
+                    src: ['partials/detail.html'],
+                    dest: '<%= buildDest %>partials/detail-<%= pkg.version %>.html'
+                }, {
+                    src: ['partials/list.html'],
+                    dest: '<%= buildDest %>partials/list-<%= pkg.version %>.html'
                 }]
             },
             css: {
@@ -76,24 +85,6 @@ module.exports = function(grunt) {
         jshint: {
             files: ['js/<%= pkg.name %>.js']
         },
-        manifest: {
-            generate: {
-                options: {
-                    basePath: '<%= buildDest %>',
-                    verbose: false,
-                    timestamp: true
-                },
-                src: [
-                    'css/**/*',
-                    'favicon.ico',
-                    'fonts/**/*',
-                    'img/**/*',
-                    'js/**/*',
-                    'partials/**/*'
-                ],
-                dest: '<%= buildDest %>manifest.appcache'
-            }
-        },
         concat: {
             options: {
                 separator: ';',
@@ -116,7 +107,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-combine');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-manifest');
     grunt.loadNpmTasks('grunt-contrib-concat');
 
     grunt.registerTask('default', function() {
@@ -147,9 +137,9 @@ module.exports = function(grunt) {
         grunt.log.writeln('Firebase URL: ' + firebaseUrl);
         grunt.log.writeln('Minify: ' + minify);
         if (minify) {
-            grunt.task.run(['clean', 'copy:min', 'cssmin', 'uglify', 'combine:single', 'concat:lib', 'manifest']);
+            grunt.task.run(['clean', 'copy:min', 'cssmin', 'uglify', 'combine:single', 'concat:lib']);
         } else {
-            grunt.task.run(['clean', 'copy:min', 'copy:css', 'concat:js', 'combine:single', 'concat:lib', 'manifest']);
+            grunt.task.run(['clean', 'copy:min', 'copy:css', 'concat:js', 'combine:single', 'concat:lib']);
         }
     });
 };

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="meupontoApp" manifest="manifest.appcache">
+<html ng-app="meupontoApp">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -9,7 +9,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/hint.min.css" rel="stylesheet">
     <link href="css/meuponto-__VERSION_SUFIX__.css" rel="stylesheet">
-    <script type="text/javascript">var FIREBASE_URL = '__FIREBASE_URL__';</script>
+    <script type="text/javascript">var APP_VERSION = '__VERSION__'; var FIREBASE_URL = '__FIREBASE_URL__';</script>
     <script src="js/libs-__VERSION__.min.js"></script>
     <script src="js/meuponto-__VERSION_SUFIX__.js"></script>
   </head>
@@ -52,9 +52,6 @@
       <div class="container main" ng-show="!loggedInOut || (user && !years)"><div class="loading"></div></div>
       <div class="container main" ng-show="loggedInOut && !user"><div class="login-button cursor-pointer" ng-click="login()"></div></div>
       <div class="container main" ng-show="loggedInOut && user && years">
-        <div class="alert alert-success cursor-pointer" ng-show="updateReady" ng-click="applyUpdate()">
-          <strong>Nova vers&atilde;o!</strong> Clique aqui para aplicar.
-        </div>
         <div ng-view></div>
       </div>
     </div>
