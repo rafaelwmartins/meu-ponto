@@ -6,6 +6,72 @@ var meupontoApp = angular.module('meupontoApp', [
     'firebase'
 ]);
 
+meupontoApp.factory('meupontoFire', ['$rootScope', 'angularFire',
+    function($rootScope, angularFire) {
+        var meupontoFire = {
+
+            initValues: function() {
+                $rootScope.years = null;
+                $rootScope.balances = null;
+                $rootScope.config = null;
+                $rootScope.isOn = false;
+                $rootScope.unbindRecords = null;
+                $rootScope.unbindConfig = null;
+                $rootScope.unbindStatus = null;
+            },
+
+            bind: function(id) {
+                angularFire(new Firebase(FIREBASE_URL + id + '/config'), $rootScope, 'config').then(function(unbind) {
+                    $rootScope.unbindConfig = unbind;
+                    angularFire(new Firebase(FIREBASE_URL + id + '/records'), $rootScope, 'years').then(function(unbind) {
+                        $rootScope.unbindRecords = unbind;
+                    });
+                });
+                angularFire(new Firebase(FIREBASE_URL + '.info/connected'), $rootScope, 'isOn').then(function(unbind) {
+                    $rootScope.unbindStatus = unbind;
+                });
+            },
+
+            unbind: function() {
+                if ($rootScope.unbindRecords) {
+                    $rootScope.unbindRecords();
+                }
+                if ($rootScope.unbindConfig) {
+                    $rootScope.unbindConfig();
+                }
+                if ($rootScope.unbindStatus) {
+                    $rootScope.unbindStatus();
+                }
+                this.initValues();
+            },
+
+            // --------------------------------------------------------------------------------------------
+            // NOTE ABOUT ANGULARFIRE BUG:
+            //   AngularFire doesn't play well with dictionaries containing only number-like keys
+            //   Therefore, an unused object with the word 'last' as the key was added and has to be scaped
+            //   In the perfect world, it is possible to get the last object using only '$last' in HTML 
+            //   https://github.com/firebase/angularFire/issues/129
+            // --------------------------------------------------------------------------------------------
+            createNewUser: function(id) {
+                var users = {};
+                users[id] = {
+                    records: {
+                        last: {
+                            value: 0
+                        }
+                    },
+                    config: {
+                        round: false,
+                        optimal: true
+                    }
+                };
+                return users;
+            }
+        };
+        return meupontoFire;
+    }
+]);
+
 // Routes configuration
 meupontoApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
