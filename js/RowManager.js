@@ -1,4 +1,4 @@
-function RowManager($rootScope, config, utils) {
+function RowManager(config, utils) {
     var dateTimeFormats;
     var officialTimes;
     var tolerances;
@@ -108,15 +108,13 @@ function RowManager($rootScope, config, utils) {
     };
 
     // Returns the balance of a record with or without rounds
-    this.getBalance = function(record) {
+    this.getBalance = function(record, round) {
         if (!isValidRecord(record)) {
             return {
                 display: '',
                 value: ''
             };
         }
-
-        var round = $rootScope.config.round;
 
         var entry1, entry2, exit1, exit2;
         if (!round) {
@@ -148,10 +146,7 @@ function RowManager($rootScope, config, utils) {
         return this.getBalanceObject(balanceValueRounded, 'ms');
     };
 
-    this.getRow = function(record) {
-        var optimal = $rootScope.config.optimal;
-        var round = $rootScope.config.round;
-
+    this.getRow = function(record, optimal, round) {
         var row;
         if (record && record.adjust !== undefined) {
             row = {};

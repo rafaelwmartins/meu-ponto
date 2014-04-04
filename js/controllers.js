@@ -148,13 +148,13 @@ meupontoControllers.controller('ListCtrl', ['$rootScope', '$scope', '$location',
                     }
                 } else {
                     if (record.entry1 && record.entry2 && record.exit1 && record.exit2) {
-                        currentBalance = RowManager.getBalance(record);
+                        currentBalance = RowManager.getBalance(record, $rootScope.config.round);
                         totalBalance += currentBalance.value;
                     } else {
                         currentBalance = 0;
                     }
                 }
-                $scope.rows[year][month][day] = RowManager.getRow(record);
+                $scope.rows[year][month][day] = RowManager.getRow(record, $rootScope.config.optimal, $rootScope.config.round);
                 $scope.rows[year][month][day].balance = currentBalance;
                 $scope.rows[year][month][day].total = RowManager.getBalanceObject(totalBalance, 'm');
             }

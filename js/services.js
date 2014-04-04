@@ -1,6 +1,6 @@
 var meupontoServices = angular.module('meupontoServices', []);
 
-meupontoServices.service('RowManager', ['$rootScope', 'configuration', 'utils', RowManager]);
+meupontoServices.service('RowManager', ['configuration', 'utils', RowManager]);
 
 meupontoServices.factory('configuration', [
     function() {
