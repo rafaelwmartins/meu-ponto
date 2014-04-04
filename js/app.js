@@ -45,13 +45,12 @@ meupontoApp.factory('meupontoFire', ['$rootScope', 'angularFire',
                 this.initValues();
             },
 
-            // --------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------
             // NOTE ABOUT ANGULARFIRE BUG:
-            //   AngularFire doesn't play well with dictionaries containing only number-like keys
-            //   Therefore, an unused object with the word 'last' as the key was added and has to be scaped
-            //   In the perfect world, it is possible to get the last object using only '$last' in HTML 
+            //   AngularFire doesn't play well with dictionaries containing only number-like keys.
+            //   An unused object with the word 'last' is added to make it work.
             //   https://github.com/firebase/angularFire/issues/129
-            // --------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------
             createNewUser: function(id) {
                 var users = {};
                 users[id] = {
