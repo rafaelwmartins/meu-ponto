@@ -16,6 +16,8 @@ meupontoFilters.filter('dayOfWeek', [
     }
 ]);
 
+// Takes away the mark for adjust
+// Example: 01_ -> 01
 meupontoFilters.filter('dayWithoutMark', [
     function() {
         return function(day) {
