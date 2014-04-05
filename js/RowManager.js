@@ -94,9 +94,9 @@ function RowManager(config, utils) {
     // Receives a value and its unit and creates a balance object which is useful for display
     this.getBalanceObject = function(value, unit) {
         var minutes;
-        if (unit.toLocaleLowerCase() == 'ms') {
+        if (unit.toLowerCase() == 'ms') {
             minutes = Math.floor(value / 60000);
-        } else if (unit.toLocaleLowerCase() == 's') {
+        } else if (unit.toLowerCase() == 's') {
             minutes = Math.floor(value / 60);
         } else { // minutes
             minutes = value;
