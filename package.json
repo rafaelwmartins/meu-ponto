@@ -20,6 +20,13 @@
         "grunt-combine": "~0.8.3",
         "grunt-contrib-csslint": "~0.1.2",
         "grunt-contrib-jshint": "~0.7.1",
-        "grunt-contrib-concat": "~0.3.0"
+        "grunt-contrib-concat": "~0.3.0",
+        "karma-chrome-launcher": "~0.1.2",
+        "karma-jasmine": "~0.1.5",
+        "karma": "~0.12.1"
+    },
+    "scripts": {
+        "test": "node_modules/karma/bin/karma start test/karma.conf.js",
+        "test-single-run": "node_modules/karma/bin/karma start test/karma.conf.js --single-run"
     }
 }

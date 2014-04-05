@@ -28,6 +28,16 @@ grunt build[:minify] [--dest] [--firebase]
 grunt build:0 --dest your-dir --firebase https://your-firebase.firebaseio.com/
 ```
 
+Tests
+-----
+Meu Ponto uses [Jasmine] and [Karma] for unit tests. To run the tests, and then watch the files for changes:
+
+```bash
+npm test
+```
+
+To rerun the tests, just change any of the source or test files.
+
 License
 -------
 Meu Ponto is freely distributable under the terms of the MIT license.
@@ -38,3 +48,5 @@ Meu Ponto is freely distributable under the terms of the MIT license.
 [Bootstrap]: http://getbootstrap.com
 [Moment.js]: http://momentjs.com
 [node.js]: http://nodejs.org
+[Jasmine]: http://jasmine.github.io
+[Karma]: http://karma-runner.github.io
