@@ -362,6 +362,7 @@ meupontoControllers.controller('CreateCtrl', ['$rootScope', '$scope', '$routePar
             if ($scope.adjust) {
                 $rootScope.years[year][month][day] = {
                     adjust: utils.getMinutes($scope.record.adjust),
+                    adjustTotalBalance: $scope.record.adjustTotalBalance,
                     note: $scope.record.note
                 };
             } else {
