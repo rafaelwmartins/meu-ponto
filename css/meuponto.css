@@ -118,3 +118,7 @@ html, body {
 .has-note {
   text-decoration: underline;
 }
+
+.btn-now-space {
+  margin-bottom: 10px;
+}

@@ -179,20 +179,28 @@ meupontoControllers.controller('ListCtrl', ['$rootScope', '$scope', '$location',
             $location.path(path);
         };
 
-        $scope.edit = function(id) {
-            $location.path('/edit/' + id);
+        $scope.edit = function(id, registerNow) {
+            var pathValue = '/edit/' + id;
+            if (registerNow) {
+                pathValue += '/now';
+            }
+            $location.path(pathValue);
         };
 
-        $scope.editToday = function() {
+        $scope.editToday = function(registerNow) {
             var today = moment().format('YYYY-MM-DD');
             var params = today.split('-');
             var year = params[0];
             var month = params[1];
             var day = params[2];
             if (!utils.hasDay(year, month, day)) {
-                $scope.create(false);
+                if (registerNow) {
+                    $location.path('/create/now');
+                } else {
+                    $scope.create(false);
+                }
             } else {
-                $scope.edit(today);
+                $scope.edit(today, registerNow);
             }
         };
 
@@ -211,8 +219,11 @@ meupontoControllers.controller('ListCtrl', ['$rootScope', '$scope', '$location',
     }
 ]);
 
-meupontoControllers.controller('EditCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'utils',
-    function($rootScope, $scope, $routeParams, $timeout, utils) {
+meupontoControllers.controller('EditCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'utils', 'configuration',
+    function($rootScope, $scope, $routeParams, $timeout, utils, configuration) {
+        if ($routeParams.extra) {
+            $scope.now = $routeParams.extra === 'now' ? true : false;
+        }
         $rootScope.menu = '';
 
         var params = $routeParams.date.split('-');
@@ -252,6 +263,16 @@ meupontoControllers.controller('EditCtrl', ['$rootScope', '$scope', '$routeParam
                 exit2: $rootScope.years[year][month][day].exit2,
                 note: $rootScope.years[year][month][day].note
             };
+        }
+
+        if ($scope.now) {
+            var entries = ['entry1', 'exit1', 'entry2', 'exit2'];
+            for (var i = 0; i < entries.length; i++) {
+                if (!$scope.record[entries[i]]) {
+                    $scope.record[entries[i]] = moment().format(configuration.dateTimeFormats.time);
+                    break;
+                }
+            }
         }
 
         $scope.apply = function() {
@@ -317,13 +338,19 @@ meupontoControllers.controller('EditCtrl', ['$rootScope', '$scope', '$routeParam
             utils.goHome();
         };
 
-        $timeout(utils.focusFirstEmptyInput);
+
+        if (!$scope.now) {
+            $timeout(utils.focusFirstEmptyInput);
+        }
     }
 ]);
 
 meupontoControllers.controller('CreateCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'utils', 'configuration',
     function($rootScope, $scope, $routeParams, $timeout, utils, configuration) {
-        $scope.adjust = $routeParams.adjust ? true : false;
+        if ($routeParams.extra) {
+            $scope.adjust = $routeParams.extra === 'adjust' ? true : false;
+            $scope.now = $routeParams.extra === 'now' ? true : false;
+        }
         $rootScope.menu = $scope.adjust ? 'adjust' : 'create';
 
         var today = moment();
@@ -335,6 +362,11 @@ meupontoControllers.controller('CreateCtrl', ['$rootScope', '$scope', '$routePar
         }
         if (!utils.hasDay(year, month, day)) {
             $scope.date = today.format(configuration.dateTimeFormats.date);
+        }
+
+        if ($scope.now) {
+            $scope.record = {};
+            $scope.record.entry1 = moment().format(configuration.dateTimeFormats.time);
         }
 
         $scope.apply = function() {
@@ -393,6 +425,9 @@ meupontoControllers.controller('CreateCtrl', ['$rootScope', '$scope', '$routePar
             utils.goHome();
         };
 
-        $timeout(utils.focusFirstEmptyInput);
+        if (!$scope.now) {
+            $timeout(utils.focusFirstEmptyInput);
+
+        }
     }
 ]);

@@ -83,11 +83,15 @@ meupontoApp.config(['$routeProvider', '$locationProvider',
             controller: 'EditCtrl',
             templateUrl: 'partials/detail-' + APP_VERSION + '.html'
         }).
+        when('/edit/:date/:extra', {
+            controller: 'EditCtrl',
+            templateUrl: 'partials/detail-' + APP_VERSION + '.html'
+        }).
         when('/create', {
             controller: 'CreateCtrl',
             templateUrl: 'partials/detail-' + APP_VERSION + '.html'
         }).
-        when('/create/:adjust', {
+        when('/create/:extra', {
             controller: 'CreateCtrl',
             templateUrl: 'partials/detail-' + APP_VERSION + '.html'
         }).

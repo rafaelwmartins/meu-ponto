@@ -1,6 +1,9 @@
 <keybinding on="mod+enter" invoke="create(false)" />
 <keybinding on="mod+shift+enter" invoke="editToday()" />
-<div class="alert alert-warning" ng-hide="hasRecords(rows)"><strong>Ooops...</strong> Nenhum registro encontrado! <a href="#/create" class="alert-link">Criar novo registro</a>.</div>
+<div class="visible-xs"><button type="button" class="btn btn-default btn-block btn-now-space" ng-click="editToday(true)">Registrar agora!</button></div>
+<div class="hidden-xs">
+  <div class="alert alert-warning" ng-hide="hasRecords(rows)"><strong>Ooops...</strong> Nenhum registro encontrado! <a href="#/create" class="alert-link">Criar novo registro</a>.</div>
+</div>
 <ul class="nav nav-tabs" ng-show="hasRecords(rows)">
   <li ng-repeat="(year, months) in rows" ng-class="{ 'active': $last }"><a href="#tab{{ year }}" data-toggle="tab">{{ year }}</a></li>
 </ul>
