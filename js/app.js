@@ -99,6 +99,10 @@ meupontoApp.config(['$routeProvider', '$locationProvider',
             controller: 'DataCtrl',
             templateUrl: 'partials/data-' + APP_VERSION + '.html'
         }).
+        when('/help', {
+            controller: 'HelpCtrl',
+            templateUrl: 'partials/help-' + APP_VERSION + '.html'
+        }).
         otherwise({
             redirectTo: '/'
         });

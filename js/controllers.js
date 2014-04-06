@@ -1,5 +1,15 @@
 var meupontoControllers = angular.module('meupontoControllers', []);
 
+meupontoControllers.controller('HelpCtrl', ['$rootScope', '$scope', 'utils',
+    function($rootScope, $scope, utils) {
+        $rootScope.menu = 'help';
+
+        $scope.goBack = function() {
+            utils.goHome();
+        };
+    }
+]);
+
 meupontoControllers.controller('ConfigCtrl', ['$rootScope', '$scope', 'utils',
     function($rootScope, $scope, utils) {
         $rootScope.menu = 'config';

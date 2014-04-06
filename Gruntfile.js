@@ -37,6 +37,9 @@ module.exports = function(grunt) {
                 }, {
                     src: ['partials/list.html'],
                     dest: '<%= buildDest %>partials/list-<%= pkg.version %>.html'
+                }, {
+                    src: ['partials/help.html'],
+                    dest: '<%= buildDest %>partials/help-<%= pkg.version %>.html'
                 }]
             },
             css: {

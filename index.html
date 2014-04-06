@@ -32,6 +32,7 @@
               <li ng-class="{ 'active': (menu == 'create') }"><a href="#/create"><span class="glyphicon glyphicon-time icon-space"></span>Novo registro</a></li>
               <li ng-class="{ 'active': (menu == 'adjust') }"><a href="#/create/adjust"><span class="glyphicon glyphicon-wrench icon-space"></span>Novo ajuste</a></li>
               <li class="visible-xs" ng-class="{ 'active': (menu == 'data') }"><a href="#/data"><span class="glyphicon glyphicon-hdd icon-space"></span>Dados</a></li>
+              <li class="visible-xs" ng-class="{ 'active': (menu == 'help') }"><a href="#/help"><span class="glyphicon glyphicon-question-sign icon-space"></span>Ajuda</a></li>
               <li class="visible-xs" ng-class="{ 'active': (menu == 'config') }"><a href="#/config"><span class="glyphicon glyphicon-cog icon-space"></span>Configura&ccedil;&otilde;es</a></li>
               <li class="visible-xs"><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out icon-space"></span>Sair - {{ user.name }}</a></li>
             </ul>
@@ -41,6 +42,7 @@
                 <ul class="dropdown-menu">
                   <li ng-class="{ 'drop-selected': (menu == 'data') }"><a href="#/data"><span class="glyphicon glyphicon-hdd icon-space"></span>Dados</a></li>
                   <li ng-class="{ 'drop-selected': (menu == 'config') }"><a href="#/config"><span class="glyphicon glyphicon-cog icon-space"></span>Configura&ccedil;&otilde;es</a></li>
+                  <li ng-class="{ 'drop-selected': (menu == 'help') }"><a href="#/help"><span class="glyphicon glyphicon-question-sign icon-space"></span>Ajuda</a></li>
                   <li class="divider"></li>
                   <li><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out icon-space"></span>Sair</a></li>
                 </ul>
