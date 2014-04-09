@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="container main" ng-show="!loggedInOut || (user && !years)"><div class="loading"></div></div>
-      <div class="container main" ng-show="loggedInOut && !user"><div class="login-button cursor-pointer" ng-click="login()"></div></div>
+      <div class="container main" ng-show="loggedInOut && !user" ng-include="'partials/login-__VERSION__.html'"></div>
       <div class="container main" ng-show="loggedInOut && user && years">
         <div ng-view></div>
       </div>

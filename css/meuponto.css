@@ -75,11 +75,16 @@ html, body {
   margin-left: 10px;
 }
 
+.title {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
 .login-button {
   width: 202px;
   height: 46px;
   padding: 0;
-  margin: 0;
+  margin: 30px auto 10px;
   background-size: 202px 46px;
   background-image: url('../img/login.png');
 }
