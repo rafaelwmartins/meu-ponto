@@ -80,6 +80,11 @@ html, body {
   text-align: center;
 }
 
+.fb-note {
+  margin-top: 40px;
+  text-align: center;
+}
+
 .login-button {
   width: 202px;
   height: 46px;
