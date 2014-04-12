@@ -6,17 +6,14 @@ threadsafe: yes
 
 handlers:
 - url: /(.*\.css)
-  mime_type: text/css
   static_files: static/\1
   upload: static/(.*\.css)
 
 - url: /(.*\.html)
-  mime_type: text/html
   static_files: static/\1
   upload: static/(.*\.html)
 
 - url: /(.*\.js)
-  mime_type: text/javascript
   static_files: static/\1
   upload: static/(.*\.js)
 
@@ -30,4 +27,5 @@ handlers:
 
 - url: /
   static_files: static/index.html
+  expiration: 1m
   upload: static/index.html

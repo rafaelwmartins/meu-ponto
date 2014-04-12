@@ -1,8 +1,8 @@
 {
     "name": "meuponto",
-    "version": "1.23.2",
+    "version": "2.0.0",
     "description": "Personal time clock.",
-    "homepage": "http://meuponto.site44.com",
+    "homepage": "http://meu-ponto.appspot.com",
     "author": "Rafael Martins",
     "repository": {
         "type": "git",
