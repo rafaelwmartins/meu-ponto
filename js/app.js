@@ -117,6 +117,7 @@ meupontoApp.config(['$routeProvider', '$locationProvider',
 meupontoApp.run(['$rootScope', 'angularFireAuth', 'meupontoFire',
     function($rootScope, angularFireAuth, meupontoFire) {
         $rootScope.loggedInOut = false;
+        $rootScope.rememberMe = false;
         meupontoFire.initValues();
         var ref = new Firebase(FIREBASE_URL);
         angularFireAuth.initialize(ref, {
@@ -125,7 +126,9 @@ meupontoApp.run(['$rootScope', 'angularFireAuth', 'meupontoFire',
         });
 
         $rootScope.login = function() {
-            angularFireAuth.login('facebook');
+            angularFireAuth.login('facebook', {
+                rememberMe: $rootScope.rememberMe
+            });
         };
 
         $rootScope.logout = function() {
