@@ -1,4 +1,4 @@
-Meu Ponto
+Meu Ponto [![Build Status](https://travis-ci.org/rafaelwmartins/meu-ponto.svg?branch=master)](https://travis-ci.org/rafaelwmartins/meu-ponto)
 =========
 Meu Ponto is a personal time clock for employees. It provides an easy way to keep track of time and attendance using a Facebook account for user login.
 
