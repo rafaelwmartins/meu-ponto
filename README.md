@@ -4,6 +4,10 @@ Meu Ponto is a personal time clock for employees. It provides an easy way to kee
 
 Please note that Meu Ponto handles entries considering the Brazilian laws and it is currently only available in Portuguese.
 
+Screenshot
+----------
+![ScreenShot](screenshots/main.png)
+
 Technical details
 -----------------
 Meu Ponto is a simple single page responsive application built using [AngularJS] and a [Firebase] backend. It relies on [AngularFire] for easy data bindings. It uses [Bootstrap] for the layout and [Moment.js] to manipulate dates.
