@@ -1,8 +1,8 @@
 {
     "rules": {
         "$id": {
-            ".read": "$id == auth.id",
-            ".write": "$id == auth.id"
+            ".read": "(auth.provider == 'facebook' && $id == auth.id) || (auth.provider != 'facebook' && $id == auth.uid)",
+            ".write": "(auth.provider == 'facebook' && $id == auth.id) || (auth.provider != 'facebook' && $id == auth.uid)"
         }
     }
 }

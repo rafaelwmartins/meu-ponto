@@ -1,8 +1,23 @@
 <div class="title">
   <h1>Meu Ponto</h1>
   <p class="lead">Agora ficou f&aacute;cil controlar os hor&aacute;rios de entrada e sa&iacute;da do trabalho!</p>
-  <div class="login-button cursor-pointer" ng-click="login()"></div>
-  <div><input type="checkbox" ng-model="$parent.rememberMe"> <span ng-click="$parent.rememberMe = !$parent.rememberMe">Mantenha-me logado</span></div>
+</div>
+<div class="row login-buttons">
+  <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
+    <a class="btn btn-block btn-lg btn-social btn-facebook" href="#" ng-click="login('facebook')">
+      <i class="fa fa-facebook"></i>
+      Logar com o Facebook
+    </a>
+    <a class="btn btn-block btn-lg btn-social btn-twitter" href="#" ng-click="login('twitter')">
+      <i class="fa fa-twitter"></i>
+      Logar com o Twitter
+    </a>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="$parent.rememberMe"> Mantenha-me logado
+      </label>
+    </div>
+  </div>
 </div>
 <div class="row">
   <div class="col-lg-6">
@@ -24,4 +39,4 @@
     <p>Permite ajustes, arredondamentos e configura&ccedil;&otilde;es.</p>
   </div>
 </div>
-<div class="text-muted fb-note"><small>N&atilde;o postaremos nada em seu Facebook! Utilizamos o Facebook apenas para facilitar a identifica&ccedil;&atilde;o dos usu&aacute;rios.</small></div>
+<div class="text-muted fb-note"><small>N&atilde;o postaremos nada! Utilizamos o Facebook/Twitter apenas para facilitar a identifica&ccedil;&atilde;o dos usu&aacute;rios.</small></div>

@@ -86,13 +86,9 @@ html, body {
   text-align: center;
 }
 
-.login-button {
-  width: 202px;
-  height: 46px;
-  padding: 0;
-  margin: 30px auto 10px;
-  background-size: 202px 46px;
-  background-image: url('../img/login.png');
+.login-buttons {
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
 .loading {
@@ -105,10 +101,6 @@ html, body {
 }
 
 @media (-webkit-min-device-pixel-ratio: 1.1) {
-  .login-button {
-    background-image: url('../img/login@2x.png');
-  }
-
   .loading {
     background-image: url('../img/loading@2x.gif');
   }

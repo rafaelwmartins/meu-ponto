@@ -10,7 +10,7 @@ Screenshot
 
 Technical details
 -----------------
-Meu Ponto is a simple single page responsive application built using [AngularJS] and a [Firebase] backend. It relies on [AngularFire] for easy data bindings. It uses [Bootstrap] for the layout and [Moment.js] to manipulate dates.
+Meu Ponto is a simple single page responsive application built using [AngularJS] and a [Firebase] backend. It relies on [AngularFire] for easy data bindings. It uses [Bootstrap] / [Bootstrap Social] / [Font Awesome] for the layout and [Moment.js] to manipulate dates.
 
 Development
 -----------
@@ -50,6 +50,8 @@ Meu Ponto is freely distributable under the terms of the MIT license.
 [Firebase]: http://www.firebase.com
 [AngularFire]: http://angularfire.com
 [Bootstrap]: http://getbootstrap.com
+[Bootstrap Social]: http://lipis.github.io/bootstrap-social
+[Font Awesome]: http://fontawesome.io
 [Moment.js]: http://momentjs.com
 [node.js]: http://nodejs.org
 [Jasmine]: http://jasmine.github.io
