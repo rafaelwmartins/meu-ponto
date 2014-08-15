@@ -89,7 +89,7 @@ module.exports = function(grunt) {
             }
         },
         jshint: {
-            files: ['js/<%= pkg.name %>.js']
+            files: ['js/*.js']
         },
         concat: {
             options: {
