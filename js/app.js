@@ -51,9 +51,8 @@ meupontoApp.factory('meupontoFire', ['$rootScope', 'angularFire',
             //   An unused object with the word 'last' is added to make it work.
             //   https://github.com/firebase/angularFire/issues/129
             // -------------------------------------------------------------------------------------
-            createNewUser: function(id) {
-                var users = {};
-                users[id] = {
+            createNewUser: function() {
+                var user = {
                     records: {
                         last: {
                             value: 0
@@ -64,7 +63,7 @@ meupontoApp.factory('meupontoFire', ['$rootScope', 'angularFire',
                         optimal: true
                     }
                 };
-                return users;
+                return user;
             }
         };
         return meupontoFire;
@@ -125,8 +124,8 @@ meupontoApp.run(['$rootScope', 'angularFireAuth', 'meupontoFire',
             name: 'user'
         });
 
-        $rootScope.login = function() {
-            angularFireAuth.login('facebook', {
+        $rootScope.login = function(provider) {
+            angularFireAuth.login(provider, {
                 rememberMe: $rootScope.rememberMe
             });
         };
@@ -138,17 +137,18 @@ meupontoApp.run(['$rootScope', 'angularFireAuth', 'meupontoFire',
 
         $rootScope.$on('angularFireAuth:login', function(evt, user) {
             $rootScope.loggedInOut = true;
-            var ref = new Firebase(FIREBASE_URL + user.id);
+            var uId = user.provider === 'facebook' ? user.id : user.uid;
+            var ref = new Firebase(FIREBASE_URL + uId);
             ref.once('value', function(snapshot) {
                 if (snapshot.val() === null) {
                     // User not found!
-                    ref.parent().update(meupontoFire.createNewUser(user.id), function(error) {
+                    ref.update(meupontoFire.createNewUser(), function(error) {
                         if (!error) {
-                            meupontoFire.bind(user.id);
+                            meupontoFire.bind(uId);
                         }
                     });
                 } else {
-                    meupontoFire.bind(user.id);
+                    meupontoFire.bind(uId);
                 }
             });
         });
