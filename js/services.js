@@ -12,6 +12,7 @@ meupontoServices.factory('configuration', [
             dateTimeFormats: {
                 time: 'HH:mm',
                 date: 'DD/MM/YYYY',
+                inputDates: ['DD/MM/YY', 'DD/MM/YYYY'],
                 times: ['HH:mm', 'HH-mm', 'HH mm']
             },
             officialTimes: {

@@ -370,7 +370,7 @@ meupontoControllers.controller('CreateCtrl', ['$rootScope', '$scope', '$routePar
         }
 
         $scope.apply = function() {
-            var date = moment($scope.date, configuration.dateTimeFormats.date);
+            var date = moment($scope.date, configuration.dateTimeFormats.inputDates);
             if (!date.isValid()) {
                 return;
             }

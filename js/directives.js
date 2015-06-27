@@ -43,7 +43,7 @@ meupontoDirectives.directive('recordDate', ['configuration',
             require: 'ngModel',
             link: function(scope, elm, attrs, ctrl) {
                 ctrl.$parsers.unshift(function(viewValue) {
-                    var date = moment(viewValue, configuration.dateTimeFormats.date);
+                    var date = moment(viewValue, configuration.dateTimeFormats.inputDates);
                     if (!date || !date.isValid()) {
                         ctrl.$setValidity('recordDate', false);
                         return undefined;
