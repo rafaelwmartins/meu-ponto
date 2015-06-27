@@ -3,7 +3,7 @@
   <div class="form-group" ng-class="{ 'has-error': (detailForm.date.$error.required || detailForm.date.$error.recordDate) }">
     <label class="col-lg-2 control-label">Dia</label>
     <div class="col-lg-4">
-      <input name="date" ng-disabled="edit" type="text" class="form-control mousetrap" placeholder="dd/mm/aaa" ng-model="date" required record-date>
+      <input name="date" ng-disabled="edit" type="text" class="form-control mousetrap" placeholder="dd/mm/aaaa" ng-model="date" required record-date>
     </div>
   </div>
   <div ng-hide="adjust" class="form-group" ng-class="{ 'has-error': detailForm.entry1.$error.recordTime }">
