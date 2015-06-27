@@ -13,7 +13,7 @@ meupontoServices.factory('configuration', [
                 time: 'HH:mm',
                 date: 'DD/MM/YYYY',
                 inputDates: ['DD/MM/YY', 'DD/MM/YYYY'],
-                inputTimes: ['HH:mm', 'HH-mm', 'HH mm']
+                inputTimes: ['HH', 'HH:mm', 'HH-mm', 'HH mm']
             },
             officialTimes: {
                 entry1: '09:00',
