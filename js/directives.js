@@ -24,7 +24,7 @@ meupontoDirectives.directive('recordTime', ['configuration',
                         ctrl.$setValidity('recordTime', true);
                         return '';
                     }
-                    var time = moment(viewValue, configuration.dateTimeFormats.times);
+                    var time = moment(viewValue, configuration.dateTimeFormats.inputTimes);
                     if (!time || !time.isValid()) {
                         ctrl.$setValidity('recordTime', false);
                         return undefined;

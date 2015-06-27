@@ -13,7 +13,7 @@ meupontoServices.factory('configuration', [
                 time: 'HH:mm',
                 date: 'DD/MM/YYYY',
                 inputDates: ['DD/MM/YY', 'DD/MM/YYYY'],
-                times: ['HH:mm', 'HH-mm', 'HH mm']
+                inputTimes: ['HH:mm', 'HH-mm', 'HH mm']
             },
             officialTimes: {
                 entry1: '09:00',
@@ -116,7 +116,7 @@ meupontoServices.factory('utils', ['$rootScope', '$location', 'configuration',
                     if (key === 'note') {
                         continue;
                     }
-                    var hourMinute = moment(record[key], configuration.dateTimeFormats.times);
+                    var hourMinute = moment(record[key], configuration.dateTimeFormats.inputTimes);
                     if (hourMinute && hourMinute.isValid()) {
                         record[key] = hourMinute.format(configuration.dateTimeFormats.time);
                     } else {
