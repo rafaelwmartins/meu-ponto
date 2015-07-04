@@ -35,6 +35,18 @@ meupontoServices.factory('utils', ['$rootScope', '$location', 'configuration',
     function($rootScope, $location, configuration) {
         var utils = {
 
+            generateToken: function() {
+                var TOKEN_SIZE = 20;
+                var token = "";
+                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+                for (var i = 0; i < TOKEN_SIZE; i++) {
+                    token += possible.charAt(Math.floor(Math.random() * possible.length));
+                }
+
+                return token;
+            },
+
             hasDay: function(year, month, day) {
                 if ($rootScope.years !== null && $rootScope.years[year] !== undefined && $rootScope.years[year][month] !== undefined && $rootScope.years[year][month][day] !== undefined) {
                     return true;

@@ -11,6 +11,12 @@
         <input type="checkbox" ng-model="optimal"> Exibir otimiza&ccedil;&otilde;es
       </label>
     </div>
+    <div class="checkbox checkbox-bottom">
+      <label ng-click="updateToken()">
+        <input type="checkbox" ng-model="integration" class="ng-pristine ng-valid"> Integra&ccedil;&atilde;o
+        <span ng-show="integration">(<strong>User:</strong> <code>{{userId}}</code> <strong>Token:</strong> <code>{{token}}</code>)</span>
+      </label>
+    </div>
   </div>
 </div>
 <div>

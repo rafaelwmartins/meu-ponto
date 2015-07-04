@@ -14,17 +14,34 @@ meupontoControllers.controller('ConfigCtrl', ['$rootScope', '$scope', 'utils',
     function($rootScope, $scope, utils) {
         $rootScope.menu = 'config';
 
+        $scope.userId = $rootScope.user.provider === 'facebook' ? $rootScope.user.id : $rootScope.user.uid;
+
         $scope.$watch('config', function() {
             if ($rootScope.config) {
                 $scope.round = $rootScope.config.round;
                 $scope.optimal = $rootScope.config.optimal;
+                if ($rootScope.config.token) {
+                    $scope.integration = true;
+                    $scope.token = $rootScope.config.token;
+                } else {
+                    $scope.integration = false;
+                }
             }
         });
 
         $scope.update = function() {
             $rootScope.config.round = $scope.round;
             $rootScope.config.optimal = $scope.optimal;
+            if ($scope.integration) {
+                $rootScope.config.token = $scope.token;
+            } else {
+                delete $rootScope.config.token;
+            }
             utils.goHome();
+        };
+
+        $scope.updateToken = function() {
+            $scope.token = utils.generateToken();
         };
 
         $scope.goBack = function() {
