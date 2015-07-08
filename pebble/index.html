@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Meu Ponto - Pebble Configuration</title>
+		<script>
+			function getUrlParams() {
+				var params = {};
+				var parts = location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+					params[key] = value;
+				});
+				return params;
+			}	
+			function fillFields() {
+				var params = getUrlParams();
+				document.getElementById('user').value = params.user;
+				document.getElementById('token').value = params.token;
+			}
+			function saveData() {
+				var configuration = {
+					user: document.getElementById('user').value,
+					token: document.getElementById('token').value
+				}
+				if (configuration.user && configuration.token) {
+					close(configuration);
+				} else {
+					alert("Preencha todos os campos!");
+				}
+			}
+			function clearData() {
+				if (confirm("Deseja realmente limpar suas credenciais?")) {
+					close({
+						clear: true
+					});
+				}
+			}
+			function close(configuration) {
+				location.href = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configuration));
+			}
+		</script>
+	</head>
+	<body onload="fillFields()">
+		<h1>Meu Ponto</h1>
+		<div>
+			<label for="user">User:</label>
+			<input type="text" id="user" />
+		</div>
+		<div>
+			<label for="token">Token:</label>
+			<input type="text" id="token" />
+		</div>
+		<div>
+			<button id="save" onclick="saveData()">Salvar</button>
+			<button id="clear" onclick="clearData()">Limpar</button>
+		</div>
+	</body>
+</html>

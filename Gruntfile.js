@@ -11,6 +11,9 @@ module.exports = function(grunt) {
         copy: {
             min: {
                 files: [{
+                    src: ['pebble/index.html'],
+                    dest: '<%= buildDest %>'
+                }, {
                     src: ['css/bootstrap.min.css', 'css/font-awesome.min.css', 'css/hint.min.css', 'css/bootstrap-social.min.css'],
                     dest: '<%= buildDest %>'
                 }, {
