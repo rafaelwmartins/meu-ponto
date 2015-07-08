@@ -12,8 +12,8 @@
 			}	
 			function fillFields() {
 				var params = getUrlParams();
-				document.getElementById('user').value = params.user;
-				document.getElementById('token').value = params.token;
+				document.getElementById('user').value = decodeURIComponent(params.user) || "";
+				document.getElementById('token').value = decodeURIComponent(params.token) || "";
 			}
 			function saveData() {
 				var configuration = {
