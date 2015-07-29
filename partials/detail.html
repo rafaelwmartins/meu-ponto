@@ -9,25 +9,25 @@
   <div ng-hide="adjust" class="form-group" ng-class="{ 'has-error': detailForm.entry1.$error.recordTime }">
     <label class="col-lg-2 control-label">Entrada 1</label>
     <div class="col-lg-4">
-      <input name="entry1" type="text" class="form-control mousetrap" placeholder="H:mm" ng-model="record.entry1" record-time>
+      <input name="entry1" type="number" class="form-control mousetrap" placeholder="H:mm" ng-model="record.entry1" record-time>
     </div>
   </div>
   <div ng-hide="adjust" class="form-group" ng-class="{ 'has-error': detailForm.exit1.$error.recordTime }">
     <label class="col-lg-2 control-label">Sa&iacute;da 1</label>
     <div class="col-lg-4">
-      <input name="exit1" type="text" class="form-control mousetrap" placeholder="H:mm" ng-model="record.exit1"  record-time>
+      <input name="exit1" type="number" class="form-control mousetrap" placeholder="H:mm" ng-model="record.exit1"  record-time>
     </div>
   </div>
     <div ng-hide="adjust" class="form-group" ng-class="{ 'has-error': detailForm.entry2.$error.recordTime }">
     <label class="col-lg-2 control-label">Entrada 2</label>
     <div class="col-lg-4">
-      <input name="entry2" type="text" class="form-control mousetrap" placeholder="H:mm" ng-model="record.entry2" record-time>
+      <input name="entry2" type="number" class="form-control mousetrap" placeholder="H:mm" ng-model="record.entry2" record-time>
     </div>
   </div>
   <div ng-hide="adjust" class="form-group" ng-class="{ 'has-error': detailForm.exit2.$error.recordTime }">
     <label class="col-lg-2 control-label">Sa&iacute;da 2</label>
     <div class="col-lg-4">
-      <input name="exit2" type="text" class="form-control mousetrap" placeholder="H:mm" ng-model="record.exit2" record-time>
+      <input name="exit2" type="number" class="form-control mousetrap" placeholder="H:mm" ng-model="record.exit2" record-time>
     </div>
   </div>
   <div ng-show="adjust" class="form-group" ng-class="{ 'has-error': (detailForm.adjust.$error.required || detailForm.adjust.$error.adjust) }">
